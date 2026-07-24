@@ -1,0 +1,63 @@
+@import "tailwindcss";
+
+/* Enable class-based dark mode (toggled by adding `dark` on <html>). */
+@custom-variant dark (&:where(.dark, .dark *));
+
+/*
+ * Design system: slate neutrals + teal/cyan accent.
+ * Space Grotesk for display headings, IBM Plex Sans for body.
+ */
+@theme {
+  --color-accent-50: #f0fdfa;
+  --color-accent-100: #ccfbf1;
+  --color-accent-200: #99f6e4;
+  --color-accent-300: #5eead4;
+  --color-accent-400: #2dd4bf;
+  --color-accent-500: #14b8a6;
+  --color-accent-600: #0d9488;
+  --color-accent-700: #0f766e;
+  --color-accent-800: #115e59;
+  --color-accent-900: #134e4a;
+
+  --font-display: "Space Grotesk", "IBM Plex Sans", sans-serif;
+  --font-sans: "IBM Plex Sans", sans-serif;
+  --font-mono: "JetBrains Mono", ui-monospace, SFMono-Regular, Menlo, monospace;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  @apply bg-white text-neutral-900 antialiased;
+  font-family: var(--font-sans);
+}
+
+.dark body {
+  @apply bg-neutral-950 text-neutral-100;
+}
+
+.font-display {
+  font-family: var(--font-display);
+}
+
+/* Subtle grid backdrop used behind hero / section headers. */
+.bg-grid {
+  background-image: linear-gradient(
+      to right,
+      color-mix(in oklab, currentColor 8%, transparent) 1px,
+      transparent 1px
+    ),
+    linear-gradient(
+      to bottom,
+      color-mix(in oklab, currentColor 8%, transparent) 1px,
+      transparent 1px
+    );
+  background-size: 40px 40px;
+}
+
+@keyframes float-slow {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-8px); }
+}
+.animate-float-slow { animation: float-slow 6s ease-in-out infinite; }

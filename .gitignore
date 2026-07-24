@@ -1,0 +1,9 @@
+node_modules/
+frontend/node_modules/
+frontend/dist/
+*.log
+.DS_Store
+
+# IEEE PDFs / thesis kept locally only — do not publish
+assets/papers/
+paper_meta.json
