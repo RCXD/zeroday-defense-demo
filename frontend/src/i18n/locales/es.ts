@@ -67,17 +67,17 @@ export const es: Messages = {
   },
   contributions: {
     eyebrow: 'Relato de investigación',
-    title: 'Lo que faltaba en trabajos previos — y cómo lo abordamos',
+    title: 'Limitaciones por enfoque en detección zero-day',
     subtitle:
-      'Los artículos no solo reportan precisión: diagnostican brechas en la detección zero-day semi-supervisada, proponen una arquitectura híbrida sin umbral y analizan la resiliencia ante muestras de evasión.',
+      'Los experimentos previos confirman límites en la detección zero-day semi-supervisada (semi-supervised), proponen una arquitectura híbrida sin umbral (threshold) y evalúan la robustez (robustness) ante evasión (evasion) adversarial (adversarial).',
     problem: {
-      title: 'Limitaciones señaladas en la literatura',
+      title: 'Cuellos de botella en cada enfoque',
       body:
-        'Mucha investigación en malware asume patrones conocidos. Los estudios Big Data 2021 y TNSM 2023 argumentan que cada alternativa semi-supervisada resuelve solo parte del problema.',
+        'Para capturar malware no visto antes se usan tres familias de métodos — firmas y aprendizaje supervisado (supervised learning), clasificación de una clase (one-class) y perfilado (profiling) con autoencoder. Cada una muestra un cuello de botella distinto; el estado del arte y los experimentos previos los resumen así, y este trabajo parte de ese compromiso.',
       bullets: [
-        'Detectores basados en firmas y aprendizaje supervisado no generalizan a familias nunca vistas sin reentrenamiento constante.',
-        'Clasificadores de una clase independientes (OCSVM, Isolation Forest, LOF) evitan umbrales manuales pero suelen mostrar tasas de detección relativamente bajas en perfiles complejos de permisos/API de Android.',
-        'El perfilado con autoencoders separa mejor el malware, pero el rendimiento depende de un umbral “ideal” de error de reconstrucción — frágil ante dataset, arquitectura e hiperparámetros.',
+        'Firmas y aprendizaje supervisado (supervised learning): fuertes en familias conocidas, débiles ante malware nunca visto.',
+        'Clasificación de una clase (one-class) (OCSVM, Isolation Forest, LOF): no exige umbral (threshold) manual, pero la detección suele ser baja en permisos/API de Android.',
+        'Perfilado (profiling) con autoencoder: mejor separación, pero el rendimiento depende del umbral (threshold) sobre el error de reconstrucción (reconstruction error).',
       ],
     },
     solution: {
@@ -91,9 +91,9 @@ export const es: Messages = {
       ],
     },
     adversarial: {
-      title: 'Perspectiva sobre evasión adversarial',
+      title: 'Perspectiva sobre evasión (evasion) adversarial (adversarial)',
       body:
-        'Más allá de la precisión en familias reservadas, los artículos preguntan si los detectores resisten cuando los atacantes perturban vectores de características.',
+        'Además de la precisión en familias holdout (holdout), se evalúa la robustez (robustness) cuando los atacantes perturban vectores de características.',
       bullets: [
         'Los modelos supervisados aprenden fronteras con malware etiquetado y pueden cruzarlas con ataques basados en gradientes (FGM) o consultas (HopSkipJump).',
         'Big Data 2021: el híbrido AEOCC identifica muestras sintéticas de evasión con más fiabilidad que aprendices supervisados entrenados con malware conocido.',
@@ -153,7 +153,7 @@ export const es: Messages = {
     eyebrow: 'Los resultados',
     title: 'Gráficos ilustrativos del mismo relato de evaluación',
     subtitle:
-      'Los diagramas recrean los temas de evaluación del artículo — comparación de modelos, sensibilidad al umbral, resiliencia adversarial — como gráficos interactivos originales (no copias de figuras publicadas).',
+      'Los diagramas recrean los temas de evaluación del artículo — comparación de modelos, sensibilidad al umbral (threshold), robustez (robustness) adversarial (adversarial) — como gráficos interactivos originales (no copias de figuras publicadas).',
     galleryTitle: 'Vistas clave de resultados',
     galleryNote:
       'Gráficos ilustrativos: clasificadores OC (OCSVM, IF, LOF, EE) frente a AE-umbral y AEOCC, más vistas UMAP bajo ataque adversarial.',

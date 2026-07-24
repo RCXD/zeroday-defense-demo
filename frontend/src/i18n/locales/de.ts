@@ -67,17 +67,17 @@ export const de: Messages = {
   },
   contributions: {
     eyebrow: 'Forschungsnarrativ',
-    title: 'Was frühere Arbeiten verpassten — und wie wir es adressierten',
+    title: 'Engpässe je Erkennungsansatz für Zero-Day',
     subtitle:
-      'Die Publikationen berichten mehr als Genauigkeit: Sie diagnostizieren Lücken bei semi-überwachter Zero-Day-Erkennung, schlagen eine schwellenwertfreie Hybridarchitektur vor und analysieren Resilienz gegen Evasionsmuster.',
+      'Vorexperimente bestätigen Grenzen bei semi-überwachter (semi-supervised) Zero-Day-Erkennung, schlagen eine schwellenwertfreie (threshold-free) Hybridarchitektur vor und bewerten Robustheit (robustness) unter adversarialer (adversarial) Evasion (evasion).',
     problem: {
-      title: 'In der Literatur benannte Grenzen',
+      title: 'Engpässe der drei Hauptansätze',
       body:
-        'Viele Malware-Studien setzen bekannte Angriffsmuster voraus. Big Data 2021 und TNSM 2023 argumentieren, dass jede semi-überwachte Alternative nur einen Teil des Problems löst.',
+        'Für ungesehene Malware werden drei Methodenfamilien genutzt — Signaturen und überwachtes Lernen (supervised learning), One-Class-Klassifikation (one-class) und Autoencoder-Profilierung (profiling). Jede hat einen anderen Engpass; Vorarbeit und Vorexperimente fassen sie so zusammen, und diese Forschung setzt an diesem Trade-off an.',
       bullets: [
-        'Signaturbasierte und überwachte Detektoren generalisieren nicht auf nie gesehene Familien ohne ständiges Nachtraining.',
-        'Eigenständige One-Class-Klassifikatoren (OCSVM, Isolation Forest, LOF) vermeiden manuelle Schwellenwerte, zeigen aber oft relativ niedrige Erkennungsraten bei komplexen Android-Berechtigungs-/API-Profilen.',
-        'Autoencoder-Profilierung trennt Malware stärker, hängt aber von einem „idealen“ Rekonstruktionsfehler-Schwellenwert ab — empfindlich gegenüber Datensatz, Architektur und Hyperparametern.',
+        'Signaturen und überwachtes Lernen (supervised learning): stark bei bekannten Familien, schwach bei nie gesehener Malware.',
+        'One-Class-Klassifikation (one-class) (OCSVM, Isolation Forest, LOF): kein manueller Schwellenwert (threshold), aber oft niedrigere Erkennungsraten bei Android-Berechtigungs-/API-Merkmalen.',
+        'Autoencoder-Profilierung (profiling): bessere Trennung, aber die Leistung hängt vom gewählten Rekonstruktionsfehler-Schwellenwert (reconstruction-error threshold) ab.',
       ],
     },
     solution: {
@@ -91,9 +91,9 @@ export const de: Messages = {
       ],
     },
     adversarial: {
-      title: 'Einsicht zu adversarialer Evasion',
+      title: 'Einsicht zu adversarialer (adversarial) Evasion (evasion)',
       body:
-        'Über Holdout-Familien-Genauigkeit hinaus prüfen die Artikel, ob Detektoren standhalten, wenn Angreifer Merkmalsvektoren stören.',
+        'Neben Holdout-Familien-Genauigkeit wird Robustheit (robustness) geprüft, wenn Angreifer Merkmalsvektoren stören.',
       bullets: [
         'Überwachte Modelle lernen Grenzen aus gelabelter Malware und können durch gradientenbasierte (FGM) oder abfragebasierte (HopSkipJump) Evasion angegriffen werden.',
         'Big Data 2021: das AEOCC-Hybrid erkennt synthetische Evasionssamples zuverlässiger als überwachte Lernverfahren mit bekannter Malware.',
@@ -153,7 +153,7 @@ export const de: Messages = {
     eyebrow: 'Die Ergebnisse',
     title: 'Illustrative Diagramme derselben Bewertungsgeschichte',
     subtitle:
-      'Die Diagramme rekonstruieren die Bewertungsthemen des Artikels — Modellvergleich, Schwellenwertsensitivität, adversariale Robustheit — als originale interaktive Charts (keine Kopien veröffentlichter Abbildungen).',
+      'Die Diagramme rekonstruieren die Bewertungsthemen des Artikels — Modellvergleich, Schwellenwertsensitivität (threshold sensitivity), adversariale (adversarial) Robustheit (robustness) — als originale interaktive Charts (keine Kopien veröffentlichter Abbildungen).',
     galleryTitle: 'Zentrale Ergebnisansichten',
     galleryNote:
       'Illustrative Charts: OC-Klassifikatoren (OCSVM, IF, LOF, EE) vs. AE-Schwellenwert vs. AEOCC, plus UMAP-ähnliche Ansichten unter adversarialen Angriffen.',

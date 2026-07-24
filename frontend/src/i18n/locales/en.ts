@@ -71,13 +71,13 @@ export const en: Messages = {
     subtitle:
       'The published work does more than report accuracy numbers: it diagnoses gaps in semi-supervised zero-day detection, proposes a threshold-free hybrid architecture, and analyzes resilience when attackers craft evasion samples.',
     problem: {
-      title: 'Limitations the papers call out',
+      title: 'Bottlenecks across zero-day detection approaches',
       body:
-        'Existing malware detection research often assumes known attack patterns. The Big Data 2021 and TNSM 2023 studies argue that semi-supervised alternatives each solve only part of the problem.',
+        'Three families of methods target unseen malware — signatures and supervised learning, one-class classification, and autoencoder profiling. Each carries a different bottleneck; prior work and preliminary experiments summarize them as follows, and this research sets out to address the trade-off jointly.',
       bullets: [
-        'Signature-based and supervised detectors cannot generalize to never-before-seen malware families without constant retraining.',
-        'Standalone one-class classifiers (OCSVM, Isolation Forest, LOF) avoid manual thresholds but tend to show relatively low detection rates on complex Android permission/API profiles.',
-        'Profiling with autoencoders can separate malware more strongly, but performance hinges on finding an “ideal” reconstruction-error threshold — sensitive to dataset, architecture, and hyperparameters.',
+        'Signatures and supervised learning: strong on known families, weak at generalizing to never-before-seen malware.',
+        'One-class classification (OCSVM, Isolation Forest, LOF): no manual reconstruction threshold, but often lower detection rates on Android permission/API features.',
+        'Autoencoder profiling: better separation of malware from benign apps, but performance hinges on which reconstruction-error threshold is chosen.',
       ],
     },
     solution: {
