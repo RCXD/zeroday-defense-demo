@@ -64,6 +64,47 @@ export const es: Messages = {
         body: 'Los experimentos abarcan tres conjuntos públicos de malware Android del archivo de investigación, con diversas representaciones de características y particiones zero-day.',
       },
     },
+    compare: {
+      title: 'Supervisado vs. perfilado no supervisado: por qué se escapa el zero-day',
+      stepLabel: 'Pasos de la animación',
+      stepNames: ['Entrenamiento etiquetado', 'Frontera', 'Zero-day', 'No detectado', 'Ataques adversarios'],
+      groupLabels: { benign: 'Grupo 0', malware: 'Grupo 1' },
+      legend: {
+        benign: 'Apps benignas (Grupo 0)',
+        knownMalware: 'Malware conocido (Grupo 1)',
+        zeroDay: 'Zero-day (no visto)',
+      },
+      supervised: {
+        title: 'Aprendizaje supervisado',
+        trainingCaption:
+          'Aprende una frontera entre el Grupo 0 (benigno) y el Grupo 1 (malware conocido) etiquetados. El rendimiento depende por completo de la calidad de esos grupos y de si los patrones de ataque desconocidos quedaron fuera del entrenamiento.',
+        boundaryCaption:
+          'El hiperplano solo separa lo etiquetado en entrenamiento. No puede representar familias nunca vistas.',
+        zeroDayCaption:
+          'Una familia nunca vista aparece donde no hay etiqueta, a menudo junto a muestras benignas.',
+        missedCaption:
+          'Sin etiqueta para la familia nueva: se clasifica como benigna. El aprendizaje supervisado no es adecuado para patrones de ataque desconocidos.',
+        adversarialCaption:
+          'Los ataques adversarios explotan esta frontera frágil: poison corrompe los datos de entrenamiento; evasión (FGSM, HopSkipJump, boundary attacks) empuja muestras más allá del hiperplano.',
+        missedBadge: 'No detectado',
+        vulnerableBadge: 'Explotable',
+      },
+      profiling: {
+        title: 'Perfilado no supervisado',
+        trainingCaption:
+          'Aprende solo la distribución del comportamiento benigno, sin etiquetas de malware ni depender de cómo otros separaron los grupos 0/1.',
+        regionCaption:
+          'Una envolvente de comportamiento normal envuelve el clúster benigno: las desviaciones, no firmas memorizadas, activan alertas.',
+        zeroDayCaption:
+          'Las mismas muestras zero-day caen lejos de la región normal aprendida.',
+        detectedCaption:
+          'La desviación de lo normal se marca: zero-day detectado sin etiquetas de malware.',
+        robustCaption:
+          'Los mismos ataques poison y evasión (FGSM, HopSkipJump, boundary) aparecen en ambos paneles: el perfilado sigue marcando perturbaciones que cruzan un hiperplano supervisado.',
+        detectedBadge: 'Detectado',
+        robustBadge: 'Más robusto',
+      },
+    },
   },
   contributions: {
     eyebrow: 'Relato de investigación',

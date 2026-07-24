@@ -47,6 +47,37 @@ export type Messages = {
       hybrid: { title: string; body: string }
       datasets: { title: string; body: string }
     }
+    compare: {
+      title: string
+      stepLabel: string
+      stepNames: [string, string, string, string, string]
+      groupLabels: { benign: string; malware: string }
+      legend: {
+        benign: string
+        knownMalware: string
+        zeroDay: string
+      }
+      supervised: {
+        title: string
+        trainingCaption: string
+        boundaryCaption: string
+        zeroDayCaption: string
+        missedCaption: string
+        adversarialCaption: string
+        missedBadge: string
+        vulnerableBadge: string
+      }
+      profiling: {
+        title: string
+        trainingCaption: string
+        regionCaption: string
+        zeroDayCaption: string
+        detectedCaption: string
+        robustCaption: string
+        detectedBadge: string
+        robustBadge: string
+      }
+    }
   }
   contributions: {
     eyebrow: string

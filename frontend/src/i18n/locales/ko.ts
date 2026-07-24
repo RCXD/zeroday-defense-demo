@@ -2,7 +2,7 @@ import type { Messages } from '../types'
 
 export const ko: Messages = {
   meta: {
-    title: 'Zeroday Defense — 제로데이(zero-day) 악성코드 탐지 연구 데모',
+    title: 'Zeroday Defense: 제로데이(zero-day) 악성코드 탐지 연구 데모',
     description:
       '오토인코더(autoencoder)와 원클래스(one-class) 분류를 활용한 프로파일링(profiling) 기반 제로데이(zero-day) 악성코드 탐지 인터랙티브 연구 데모 (김치호, Texas A&M University–Commerce).',
   },
@@ -64,6 +64,47 @@ export const ko: Messages = {
         body: '연구 아카이브의 세 가지 공개 Android 악성코드 데이터셋에서 실험했으며, 다양한 특징 표현과 제로데이(zero-day) 홀드아웃(holdout) 분할을 다룹니다.',
       },
     },
+    compare: {
+      title: '지도 학습 vs 비지도 프로파일링, 제로데이가 왜 빠져나가는가',
+      stepLabel: '애니메이션 단계',
+      stepNames: ['레이블 학습', '결정 경계', '제로데이', '미탐', '적대적 공격'],
+      groupLabels: { benign: '그룹 0', malware: '그룹 1' },
+      legend: {
+        benign: '정상 앱 (그룹 0)',
+        knownMalware: '알려진 악성코드 (그룹 1)',
+        zeroDay: '제로데이 (미지)',
+      },
+      supervised: {
+        title: '지도 학습(supervised learning)',
+        trainingCaption:
+          '레이블된 그룹 0(정상)과 그룹 1(알려진 악성코드) 사이의 경계를 학습합니다. 성능은 두 그룹이 얼마나 잘 정제되었는지, 미지의 공격 패턴이 학습 데이터에서 얼마나 잘 배제되었는지에 전적으로 의존합니다.',
+        boundaryCaption:
+          '하이퍼플레인(구분선)은 학습 때 본 레이블만 분리합니다. 한 번도 보지 못한 패밀리는 원리적으로 표현할 수 없습니다.',
+        zeroDayCaption:
+          '미지의 패밀리가 레이블 없는 영역, 종종 정상 샘플 옆에 나타납니다.',
+        missedCaption:
+          '새 패밀리에 대한 레이블이 없어 정상으로 분류됩니다. 지도 학습은 미지의 공격 패턴 탐지에 적합한 방법이 아닙니다.',
+        adversarialCaption:
+          '적대적(adversarial) 공격이 이 취약한 경계를 노립니다. poison은 학습 데이터를 오염시키고, evasion(FGSM, HopSkipJump, boundary attack 등)은 샘플을 하이퍼플레인 너머로 밀어 탐지를 회피합니다.',
+        missedBadge: '미탐',
+        vulnerableBadge: '취약',
+      },
+      profiling: {
+        title: '비지도 프로파일링(profiling)',
+        trainingCaption:
+          '정상 행동의 분포만 학습합니다. 악성코드 레이블이 필요 없고, 타인이 만든 그룹 0/1 분리 품질에 의존하지 않습니다.',
+        regionCaption:
+          '정상 행동 영역이 초록 샘플 군집을 감쌉니다. 암기한 공격 시그니처가 아니라 편차가 경보를 켭니다.',
+        zeroDayCaption:
+          '같은 제로데이 샘플이 학습된 정상 영역 밖에 떨어집니다.',
+        detectedCaption:
+          '정상에서 벗어난 편차를 탐지합니다. 악성코드 레이블 없이도 제로데이를 잡아냅니다.',
+        robustCaption:
+          '양쪽 패널에 동일한 poison·evasion(FGSM, HopSkipJump, boundary attack) 공격이 표시됩니다. 프로파일링은 하이퍼플레인을 넘긴 섭동도 여전히 탐지합니다.',
+        detectedBadge: '탐지',
+        robustBadge: '강건',
+      },
+    },
   },
   contributions: {
     eyebrow: '연구 배경',
@@ -73,7 +114,7 @@ export const ko: Messages = {
     problem: {
       title: '제로데이 탐지에서 확인된 접근별 한계',
       body:
-        '미지의 악성코드를 잡기 위해 쓰이는 대표 접근—시그니처·지도 학습(supervised learning), 원클래스(one-class) 분류, 오토인코더(autoencoder) 프로파일링(profiling)—은 각각 다른 병목을 가집니다. 선행 연구와 사전 실험에서 아래와 같이 정리되었고, 본 연구는 이 트레이드오프를 동시에 풀기 위해 출발했습니다.',
+        '미지의 악성코드를 잡기 위해 쓰이는 대표 접근은 시그니처·지도 학습(supervised learning), 원클래스(one-class) 분류, 오토인코더(autoencoder) 프로파일링(profiling) 등으로 나뉩니다. 각각 다른 병목이 있으며, 선행 연구와 사전 실험에서 아래와 같이 정리되었습니다. 본 연구는 이 트레이드오프를 동시에 풀기 위해 출발했습니다.',
       bullets: [
         '시그니처·지도 학습(supervised learning): 알려진 악성코드에는 강하지만, 한 번도 보지 못한 패밀리로는 일반화하기 어렵습니다.',
         '원클래스(one-class) 분류(OCSVM, Isolation Forest, LOF): 재구성 임계값(threshold)을 직접 맞출 필요는 없지만, Android 권한·API 특징에서는 탐지율이 낮은 경우가 많습니다.',
@@ -93,7 +134,7 @@ export const ko: Messages = {
     adversarial: {
       title: '적대적(adversarial) 회피(evasion) 공격에서의 시사점',
       body:
-        '홀드아웃(holdout) 패밀리 정확도뿐 아니라, 공격자가 특징 벡터를 교란해 결정 경계를 넘을 때 탐지기가 버티는지—강건성(robustness)—까지 함께 평가했습니다.',
+        '홀드아웃(holdout) 패밀리 정확도뿐 아니라, 공격자가 특징 벡터를 교란해 결정 경계를 넘을 때 탐지기가 버티는지, 즉 강건성(robustness)까지 함께 평가했습니다.',
       bullets: [
         '지도 학습(supervised learning) 모델은 레이블된 악성코드로 경계를 학습하므로, FGM 같은 그래디언트 기반·HopSkipJump 같은 쿼리 기반 회피(evasion) 공격에 취약할 수 있습니다.',
         'Big Data 2021: 하이브리드 AEOCC가 알려진 악성코드로 학습한 지도(supervised) 모델보다, 탐지를 회피하도록 만든 합성 샘플을 더 안정적으로 식별합니다.',
@@ -219,7 +260,7 @@ export const ko: Messages = {
     },
   },
   footer: {
-    left: 'Zeroday Defense — 인터랙티브 악성코드 연구 데모.',
+    left: 'Zeroday Defense, 인터랙티브 악성코드 연구 데모.',
     right: '설명용 차트 · Meraz\'18, Drebin, EMBER 데이터셋.',
   },
 }

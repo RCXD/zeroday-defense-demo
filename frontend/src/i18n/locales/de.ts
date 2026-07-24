@@ -64,6 +64,47 @@ export const de: Messages = {
         body: 'Experimente umfassen drei öffentliche Android-Malware-Datensätze aus dem Forschungsarchiv mit verschiedenen Merkmalsdarstellungen und Zero-Day-Holdout-Splits.',
       },
     },
+    compare: {
+      title: 'Überwacht vs. unüberwachtes Profiling — warum Zero-Day durchrutscht',
+      stepLabel: 'Animationsschritte',
+      stepNames: ['Gelabeltes Training', 'Entscheidungsgrenze', 'Zero-Day', 'Verpasst', 'Adversariale Angriffe'],
+      groupLabels: { benign: 'Gruppe 0', malware: 'Gruppe 1' },
+      legend: {
+        benign: 'Benigne Apps (Gruppe 0)',
+        knownMalware: 'Bekannte Malware (Gruppe 1)',
+        zeroDay: 'Zero-Day (ungesehen)',
+      },
+      supervised: {
+        title: 'Überwachtes Lernen',
+        trainingCaption:
+          'Lernt eine Grenze zwischen gelabelter Gruppe 0 (benign) und Gruppe 1 (bekannte Malware). Die Leistung hängt vollständig davon ab, wie sauber diese Gruppen kuratiert wurden und ob unbekannte Angriffsmuster aus dem Training ferngehalten wurden.',
+        boundaryCaption:
+          'Die Hyperebene trennt nur, was beim Training gelabelt war. Nie gesehene Familien können prinzipiell nicht abgebildet werden.',
+        zeroDayCaption:
+          'Eine nie zuvor gesehene Familie erscheint dort, wo keine Labels existieren — oft neben benignen Samples.',
+        missedCaption:
+          'Kein Label für die neue Familie: als benign klassifiziert. Überwachtes Lernen ist grundsätzlich ungeeignet für unbekannte Angriffsmuster.',
+        adversarialCaption:
+          'Adversariale Angriffe nutzen diese fragile Grenze aus: Poison vergiftet Trainingsdaten; Evasion (FGSM, HopSkipJump, Boundary-Angriffe) schiebt Samples über die Hyperebene.',
+        missedBadge: 'Verpasst',
+        vulnerableBadge: 'Ausnutzbar',
+      },
+      profiling: {
+        title: 'Unüberwachtes Profiling',
+        trainingCaption:
+          'Lernt nur die Verteilung benignen Verhaltens — keine Malware-Labels, keine Abhängigkeit von der Gruppen-0/1-Trennung in fremden Datensätzen.',
+        regionCaption:
+          'Eine Hülle normalen Verhaltens umschließt den benignen Cluster — Abweichungen, nicht auswendig gelernte Angriffssignaturen, lösen Alarm aus.',
+        zeroDayCaption:
+          'Dieselben Zero-Day-Samples landen weit außerhalb der gelernten Normalregion.',
+        detectedCaption:
+          'Abweichung von Normal wird markiert — Zero-Day erkannt, ohne je Malware-Labels gesehen zu haben.',
+        robustCaption:
+          'Dieselben Poison- und Evasionsangriffe (FGSM, HopSkipJump, Boundary) erscheinen in beiden Panels — Profiling markiert Perturbationen, die eine überwachte Hyperebene überqueren.',
+        detectedBadge: 'Erkannt',
+        robustBadge: 'Robuster',
+      },
+    },
   },
   contributions: {
     eyebrow: 'Forschungsnarrativ',
