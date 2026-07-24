@@ -121,6 +121,14 @@ export const en: Messages = {
       'umap-fgm': 'UMAP-style embedding under adversarial FGM perturbation',
       'umap-hsj': 'UMAP-style embedding under HopSkipJump adversarial attack',
     },
+    galleryThumbLabels: {
+      'model-comparison': 'Models',
+      'aeocc-bar': 'AEOCC',
+      'ae-thresholds': 'Thresh.',
+      perturbation: 'Perturb.',
+      'umap-fgm': 'FGM',
+      'umap-hsj': 'HSJ',
+    },
   },
   research: {
     eyebrow: 'The science',

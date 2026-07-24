@@ -1,22 +1,25 @@
 import type { Messages } from '../types'
-import { en } from './en'
 
 export const de: Messages = {
-  ...en,
   meta: {
     title: 'Zeroday Defense — Forschungsdemo zur Zero-Day-Malware-Erkennung',
     description:
       'Interaktive Forschungsdemo: profilbasierte Zero-Day-Malware-Erkennung mit Autoencoder- und One-Class-Klassifikationsarchitekturen (Chiho Kim, Texas A&M University–Commerce).',
   },
   lang: {
-    ...en.lang,
     label: 'Sprache',
     chooseTitle: 'Sprache wählen',
-    chooseSubtitle: 'Sie können dies jederzeit in der Navigationsleiste ändern.',
+    chooseSubtitle: 'Sie können dies jederzeit über die Navigationsleiste ändern.',
     continue: 'Weiter',
+    names: {
+      en: 'English',
+      ko: '한국어',
+      es: 'Español',
+      de: 'Deutsch',
+    },
   },
   nav: {
-    ...en.nav,
+    brand: 'Zeroday Defense',
     overview: 'Überblick',
     approaches: 'Ansätze',
     results: 'Ergebnisse',
@@ -24,8 +27,145 @@ export const de: Messages = {
     team: 'Team',
     toggleTheme: 'Farbschema umschalten',
   },
+  hero: {
+    badge: 'Malware-Forschung · Texas A&M University–Commerce',
+    brand: 'Zeroday Defense',
+    titleBefore: '',
+    titleAccent: 'Zero-Day-Malware',
+    titleAfter: ' ohne manuelle Schwellenwerte erkennen',
+    subtitle:
+      'Ein interaktiver Einblick in profilbasierte Erkennung, die Autoencoder und One-Class-Klassifikation kombiniert — mit bis zu {detection} Erkennung auf öffentlichen Android-Malware-Datensätzen ohne Signatur-Updates.',
+    ctaApproaches: 'Ansätze erkunden',
+    ctaResults: 'Ergebnisse ansehen',
+    stats: {
+      detection: 'Beste berichtete Erkennung (AEOCC)',
+      datasets: 'Bewertete öffentliche Malware-Datensätze',
+      models: 'Zentrale Architekturfamilie',
+      threat: 'Bedrohungsmodell: unbekannte Malware-Familien',
+    },
+  },
+  overview: {
+    eyebrow: 'Die Idee',
+    title: 'Benignes Verhalten profilieren — Abweichungen markieren',
+    subtitle:
+      'Signaturbasierte und überwachte Detektoren versagen bei nie zuvor gesehener Malware. Semi-überwachtes Profiling lernt ein Modell benignen App-Verhaltens und wertet Abweichungen als Zero-Day-Bedrohungen.',
+    cards: {
+      profiling: {
+        title: 'Profilierung mit Autoencodern',
+        body: 'Autoencoder rekonstruieren benigne Merkmalsvektoren aus Android-Berechtigungs- und API-Aufrufprofilen. Malware erzeugt höhere Rekonstruktionsfehler — die Schwellenwertwahl bleibt jedoch fragil.',
+      },
+      hybrid: {
+        title: 'AE + One-Class-Klassifikation',
+        body: 'AEOCC koppelt Autoencoder-Abstraktion mit einem OC-Klassifikator, um manuelle Schwellenwertanpassung zu vermeiden und dennoch starke Erkennung zu liefern — die schwellenwertfreie Architektur aus den BigData- und TNSM-Artikeln.',
+      },
+      datasets: {
+        title: 'Meraz\'18, Drebin & EMBER',
+        body: 'Experimente umfassen drei öffentliche Android-Malware-Datensätze aus dem Forschungsarchiv mit verschiedenen Merkmalsdarstellungen und Zero-Day-Holdout-Splits.',
+      },
+    },
+  },
+  approaches: {
+    eyebrow: 'Die Methoden',
+    title: 'Fünf verglichene Profiling-Architekturen',
+    subtitle:
+      'Wählen Sie einen Ansatz, um seine Hyperparameter-Sensitivitäts-Heatmap zu sehen — als illustrative Grafik desselben Bewertungsablaufs wie im Artikel.',
+    items: {
+      ae: {
+        name: 'Autoencoder-Profilierung',
+        short: 'Rekonstruktionsfehler',
+        description:
+          'Ein Feed-Forward-Autoencoder lernt, benigne App-Profile zu rekonstruieren. Malware-Proben erzeugen höhere Rekonstruktionsfehler und trennen Zero-Day-Bedrohungen vom gelernten benignen Manifold.',
+      },
+      vae: {
+        name: 'VAE-Profilierung',
+        short: 'Latente Regularisierung',
+        description:
+          'Ein variationaler Autoencoder regularisiert den latenten Raum mit KL-Strafe, fördert glattere benign Darstellungen und legt anomales Malware-Verhalten über Rekonstruktion und latente Divergenz offen.',
+      },
+      cnn1d: {
+        name: 'CNN-AE (1D)',
+        short: 'Sequenz-Encoder',
+        description:
+          'Eindimensionale Faltungsschichten erfassen lokale sequenzielle Muster in Merkmalsvektoren vor der Dekodierung und modellieren Struktur in Malware-Merkmalsdarstellungen.',
+      },
+      cnn2d: {
+        name: 'CNN-AE (2D)',
+        short: 'Bildähnliche Merkmale',
+        description:
+          'Zweidimensionale Faltungen behandeln umgeformte Merkmalskarten als Bilder und lernen räumliche Korrelationen zwischen Berechtigungs- und API-Aufrufmerkmalen für profilbasierte Erkennung.',
+      },
+      aeocc: {
+        name: 'AE + OCC-Hybrid',
+        short: 'Schwellenwertfrei',
+        description:
+          'Kombiniert Autoencoder-Abstraktion mit One-Class-Klassifikation (AEOCC), um manuelle Schwellenwertanpassung zu entfernen und dennoch starke Erkennung zu behalten — der Kernbeitrag der BigData- und TNSM-Publikationen.',
+      },
+    },
+  },
+  results: {
+    eyebrow: 'Die Ergebnisse',
+    title: 'Illustrative Diagramme derselben Bewertungsgeschichte',
+    subtitle:
+      'Die Diagramme rekonstruieren die Bewertungsthemen des Artikels — Modellvergleich, Schwellenwertsensitivität, adversariale Robustheit — als originale interaktive Charts (keine Kopien veröffentlichter Abbildungen).',
+    galleryTitle: 'Zentrale Ergebnisansichten',
+    galleryNote:
+      'Illustrative Charts: OC-Klassifikatoren (OCSVM, IF, LOF, EE) vs. AE-Schwellenwert vs. AEOCC, plus UMAP-ähnliche Ansichten unter adversarialen Angriffen.',
+    heatmapTitle: 'Hyperparameter-Gitter je Ansatz',
+    heatmapBody:
+      'Jedes Gitter durchläuft Architektur- und Trainingseinstellungen. Höhere Werte bedeuten stärkere Zero-Day-Erkennung unter einem profilbasierten Protokoll.',
+    galleryCaptions: {
+      'model-comparison': 'OC-Klassifikatoren vs. AE-Schwellenwert vs. AEOCC (illustrativ)',
+      'aeocc-bar': 'AEOCC im Vergleich zu Basisdetektoren hervorgehoben',
+      'ae-thresholds': 'Sensitivität des AE-Profilings gegenüber manueller Schwellenwertwahl',
+      perturbation: 'Erkennung unter Merkmalsstörung (AEOCC vs. überwacht)',
+      'umap-fgm': 'UMAP-ähnliches Embedding unter adversarialer FGM-Störung',
+      'umap-hsj': 'UMAP-ähnliches Embedding unter HopSkipJump-Angriff',
+    },
+    galleryThumbLabels: {
+      'model-comparison': 'Modelle',
+      'aeocc-bar': 'AEOCC',
+      'ae-thresholds': 'Schwelle',
+      perturbation: 'Störung',
+      'umap-fgm': 'FGM',
+      'umap-hsj': 'HSJ',
+    },
+  },
   research: {
-    ...en.research,
+    eyebrow: 'Die Wissenschaft',
+    title: 'Publikationen',
+    subtitle:
+      'Begutachtete Artikel und Thesis hinter dieser Demo. IEEE-Artikel werden nur per DOI verlinkt — PDFs werden hier nicht weiterverteilt.',
     thesisLabel: 'Masterarbeit',
+    abstracts: {
+      'bigdata-2021':
+        'Kombiniert Autoencoding und One-Class-Klassifikation, um von neuronalen Abstraktionen zu profitieren und komplexe Schwellenwertwahl zu vermeiden — und adressiert Grenzen eigenständiger OC-Klassifikatoren sowie schwellenwertsensitiver AE-Profilierung.',
+      'tnsm-2023':
+        'Erweiterte Journalversion mit gleichzeitigem AE+OCC-Training, Modellauswahlverfahren (AEOCC), Evaluation auf Meraz\'18 und Drebin sowie Robustheitsanalyse unter adversarialen Evasionsangriffen.',
+      'thesis-2022':
+        'Masterarbeit mit dem grundlegenden profilbasierten Zero-Day-Malware-Erkennungsrahmen, experimenteller Methodik und vergleichender Bewertung von Autoencoder-Architekturen und hybriden AE+OCC-Entwürfen.',
+    },
+  },
+  team: {
+    eyebrow: 'Das Team',
+    title: 'Forschungsteam',
+    subtitle:
+      'Eine Kooperation von Texas A&M University–Commerce, University of Colorado Colorado Springs und ETRI.',
+    funding:
+      'Forschungskooperation zwischen Texas A&M University–Commerce und ETRI (Electronics and Telecommunications Research Institute), Korea — Cybersicherheit und Zero-Day-Bedrohungserkennung.',
+    roles: {
+      'Jinoh Kim': 'Principal Investigator / Betreuer',
+      'Chiho Kim': 'Erstautor / Masterstudent',
+      'Sang-Yoon Chang': 'Koautor',
+      'Dongeun Lee': 'Koautor',
+      'Jonghyun Kim': 'Koautor',
+    },
+    notes: {
+      'Jinoh Kim': 'Senior Member, IEEE',
+      'Chiho Kim': 'Member, IEEE',
+    },
+  },
+  footer: {
+    left: 'Zeroday Defense — interaktive Malware-Forschungsdemo.',
+    right: 'Illustrative Diagramme · Meraz\'18, Drebin, EMBER-Datensätze.',
   },
 }

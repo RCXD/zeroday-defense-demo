@@ -6,15 +6,6 @@ import { GalleryDiagram } from '../diagrams/GalleryDiagram'
 import { HeatmapDiagram } from '../diagrams/HeatmapDiagram'
 import { useLanguage } from '../i18n/LanguageContext'
 
-const THUMB_LABEL: Record<GalleryId, string> = {
-  'model-comparison': 'Models',
-  'aeocc-bar': 'AEOCC',
-  'ae-thresholds': 'Thresh.',
-  perturbation: 'Perturb.',
-  'umap-fgm': 'FGM',
-  'umap-hsj': 'HSJ',
-}
-
 export function ResultsExplorer() {
   const { t } = useLanguage()
   const gallery = useMemo(
@@ -25,11 +16,19 @@ export function ResultsExplorer() {
       })),
     [t],
   )
+  const approaches = useMemo(
+    () =>
+      APPROACHES.map((a) => ({
+        ...a,
+        name: t.approaches.items[a.key]?.name ?? a.name,
+      })),
+    [t],
+  )
   const [galleryId, setGalleryId] = useState<GalleryId>(gallery[0].id)
   const [approachId, setApproachId] = useState(APPROACHES[0].id)
 
   const activeFigure = gallery.find((f) => f.id === galleryId) ?? gallery[0]
-  const activeApproach = APPROACHES.find((a) => a.id === approachId) ?? APPROACHES[0]
+  const activeApproach = approaches.find((a) => a.id === approachId) ?? approaches[0]
 
   return (
     <Section
@@ -75,7 +74,7 @@ export function ResultsExplorer() {
                     : 'border-neutral-200 text-neutral-500 hover:border-neutral-300 dark:border-neutral-800 dark:hover:border-neutral-700'
                 }`}
               >
-                {THUMB_LABEL[f.id]}
+                {t.results.galleryThumbLabels[f.id] ?? f.id}
               </button>
             ))}
           </div>
@@ -90,7 +89,7 @@ export function ResultsExplorer() {
           </p>
 
           <div className="mb-4 flex flex-wrap gap-2">
-            {APPROACHES.map((a) => (
+            {approaches.map((a) => (
               <button
                 key={a.id}
                 type="button"

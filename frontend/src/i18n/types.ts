@@ -62,6 +62,7 @@ export type Messages = {
     heatmapTitle: string
     heatmapBody: string
     galleryCaptions: Record<string, string>
+    galleryThumbLabels: Record<string, string>
   }
   research: {
     eyebrow: string
