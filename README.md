@@ -14,6 +14,8 @@ npm run dev
 
 Open the URL shown in the terminal (typically `http://localhost:5173`).
 
+**Live demo:** [https://rcxd.github.io/zeroday-defense-demo/](https://rcxd.github.io/zeroday-defense-demo/) (GitHub Pages, deploys from `main` via GitHub Actions)
+
 To produce a production build:
 
 ```bash
