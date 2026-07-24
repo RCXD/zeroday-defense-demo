@@ -104,22 +104,22 @@ export const ko: Messages = {
   },
   results: {
     eyebrow: '실험 결과',
-    title: '기록된 실험 도표 — 합성 수치 없음',
+    title: '같은 평가 스토리를 담은 자체 도식',
     subtitle:
-      '막대 차트 수치를 추정하는 대신, 실험 아카이브에서 복원한 원본 결과 도표를 보여 줍니다. 갤러리 이미지나 접근법 히트맵을 선택해 확인하세요.',
-    galleryTitle: '주요 결과 도표',
+      '아래 도식은 논문의 평가 주제(모델 비교, 임계값 민감도, 적대적 강건성)를 원본 figure 복제가 아닌 인터랙티브 차트로 재구성한 것입니다.',
+    galleryTitle: '주요 결과 뷰',
     galleryNote:
-      '기록된 실험의 도표 — OC 분류기(OCSVM, IF, LOF, EE)와 AE-임계값, AEOCC 변형 비교.',
-    heatmapTitle: '접근법 하이퍼파라미터 히트맵',
+      '설명용 차트: OC 분류기(OCSVM, IF, LOF, EE) vs AE-임계값 vs AEOCC, 그리고 적대적 UMAP 스타일 뷰.',
+    heatmapTitle: '접근법 하이퍼파라미터 그리드',
     heatmapBody:
-      '각 히트맵은 아키텍처·학습 하이퍼파라미터를 스윕합니다. 밝은 영역은 프로파일링 기반 평가 프로토콜에서 더 강한 제로데이 탐지를 나타냅니다.',
+      '각 그리드는 아키텍처·학습 설정을 스윕합니다. 높은 점수는 프로파일링 기반 프로토콜에서 더 강한 제로데이 탐지를 의미합니다.',
     galleryCaptions: {
-      'model-comparison': 'OC 분류기 vs. AE-임계값 vs. AEOCC (오차 막대 포함)',
-      'aeocc-bar': '모델 선택 기준별 AEOCC 변형',
+      'model-comparison': 'OC 분류기 vs. AE-임계값 vs. AEOCC (설명용)',
+      'aeocc-bar': '베이스라인 대비 AEOCC 강조',
       'ae-thresholds': '수동 임계값 선택에 대한 AE 프로파일링 민감도',
-      perturbation: '특징 섭동이 탐지 안정성에 미치는 영향',
-      'umap-fgm': '적대적 FGM 섭동(ε=0.05) 하 UMAP 임베딩',
-      'umap-hsj': 'HopSkipJump 적대적 공격 하 UMAP 임베딩',
+      perturbation: '특징 섭동 하 탐지 (AEOCC vs 지도 학습)',
+      'umap-fgm': '적대적 FGM 섭동 하 UMAP 스타일 임베딩',
+      'umap-hsj': 'HopSkipJump 공격 하 UMAP 스타일 임베딩',
     },
   },
   research: {

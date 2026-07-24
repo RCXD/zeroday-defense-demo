@@ -1,6 +1,6 @@
-// Curated metadata and figure paths from Chiho Kim's zero-day malware detection
-// research (Texas A&M University–Commerce). Result figures are recovered from
-// recorded experiment outputs; IEEE PDFs are linked via DOI only.
+// Curated metadata for Chiho Kim's zero-day malware detection research
+// (Texas A&M University–Commerce). Diagrams in the UI are illustrative
+// reconstructions of the same concepts — not copies of paper figures.
 
 export const HEADLINE = {
   bestDetection: '~96%',
@@ -15,7 +15,6 @@ export type Approach = {
   name: string
   short: string
   description: string
-  figure: string
 }
 
 export const APPROACHES: Approach[] = [
@@ -26,7 +25,6 @@ export const APPROACHES: Approach[] = [
     short: 'Reconstruction error',
     description:
       'A feed-forward autoencoder learns to reconstruct benign application profiles. Malware samples produce higher reconstruction error, separating zero-day threats from the learned benign manifold.',
-    figure: 'figures/1-1.AE_heatmap.png',
   },
   {
     id: 'vae',
@@ -35,7 +33,6 @@ export const APPROACHES: Approach[] = [
     short: 'Latent regularization',
     description:
       'A variational autoencoder regularizes the latent space with a KL penalty, encouraging smoother benign representations and exposing anomalous malware behavior through reconstruction and latent divergence.',
-    figure: 'figures/1-2.VAE_heatmap.png',
   },
   {
     id: 'cnn1d',
@@ -44,7 +41,6 @@ export const APPROACHES: Approach[] = [
     short: 'Sequence encoder',
     description:
       'One-dimensional convolutional layers capture local sequential patterns in feature vectors before decoding, modeling spatial structure in malware feature representations.',
-    figure: 'figures/1-3.CNN-AE_1D_heatmap.png',
   },
   {
     id: 'cnn2d',
@@ -53,7 +49,6 @@ export const APPROACHES: Approach[] = [
     short: 'Image-like features',
     description:
       'Two-dimensional convolutions treat reshaped feature maps as images, learning spatial correlations across permission and API-call features for profiling-based detection.',
-    figure: 'figures/1-4.CNN-AE_2D_heatmap.png',
   },
   {
     id: 'aeocc',
@@ -62,46 +57,46 @@ export const APPROACHES: Approach[] = [
     short: 'Threshold-free',
     description:
       'Combines autoencoder abstraction with one-class classification (AEOCC) to remove manual threshold tuning while retaining strong detection — the core contribution across the BigData and TNSM publications.',
-    figure: 'figures/AEOCCs-with-errorbar.png',
   },
 ]
 
 export type ResultFigure = {
-  id: string
-  file: string
+  id: GalleryId
   caption: string
 }
+
+export type GalleryId =
+  | 'model-comparison'
+  | 'aeocc-bar'
+  | 'ae-thresholds'
+  | 'perturbation'
+  | 'umap-fgm'
+  | 'umap-hsj'
 
 export const RESULT_GALLERY: ResultFigure[] = [
   {
     id: 'model-comparison',
-    file: 'figures/ModelsComparisonWithErrorbar.png',
-    caption: 'OC classifiers vs. AE-threshold vs. AEOCC (with error bars)',
+    caption: 'OC classifiers vs. AE-threshold vs. AEOCC (illustrative)',
   },
   {
     id: 'aeocc-bar',
-    file: 'figures/AEOCCs-with-errorbar.png',
-    caption: 'AEOCC variants across model-selection criteria',
+    caption: 'AEOCC highlighted against baseline detectors',
   },
   {
     id: 'ae-thresholds',
-    file: 'figures/AE-Thresholds_0to5_v2.png',
     caption: 'Sensitivity of AE profiling to manual threshold selection',
   },
   {
     id: 'perturbation',
-    file: 'figures/Perturbation_v2.png',
-    caption: 'Impact of feature perturbation on detection stability',
+    caption: 'Detection under feature perturbation (AEOCC vs supervised)',
   },
   {
     id: 'umap-fgm',
-    file: 'figures/UMAP-FGM-eps0_05.png',
-    caption: 'UMAP embedding under adversarial FGM perturbation (ε=0.05)',
+    caption: 'UMAP-style embedding under adversarial FGM perturbation',
   },
   {
     id: 'umap-hsj',
-    file: 'figures/UMAP-HSJ.png',
-    caption: 'UMAP embedding under HopSkipJump adversarial attack',
+    caption: 'UMAP-style embedding under HopSkipJump adversarial attack',
   },
 ]
 
@@ -134,7 +129,7 @@ export const PUBLICATIONS: Publication[] = [
     doi: '10.1109/TNSM.2023.3251282',
     authors: ['Chiho Kim', 'Sang-Yoon Chang', 'Jonghyun Kim', 'Dongeun Lee', 'Jinoh Kim'],
     abstract:
-      'Extended journal version with concurrent AE+OCC training, a model-selection method (AEOCC) for well-suited learners, evaluation on Meraz\'18 and Drebin, and resilience analysis under adversarial evasion attacks.',
+      "Extended journal version with concurrent AE+OCC training, a model-selection method (AEOCC) for well-suited learners, evaluation on Meraz'18 and Drebin, and resilience analysis under adversarial evasion attacks.",
   },
   {
     id: 'thesis-2022',
@@ -143,7 +138,7 @@ export const PUBLICATIONS: Publication[] = [
     year: 2022,
     authors: ['Chiho Kim'],
     abstract:
-      'Master\'s thesis presenting the foundational profiling-based zero-day malware detection framework, experimental methodology, and comparative evaluation of autoencoder architectures and hybrid AE+OCC designs.',
+      "Master's thesis presenting the foundational profiling-based zero-day malware detection framework, experimental methodology, and comparative evaluation of autoencoder architectures and hybrid AE+OCC designs.",
   },
 ]
 
@@ -187,4 +182,4 @@ export const TEAM: TeamMember[] = [
 export const FUNDING =
   'Research collaboration between Texas A&M University–Commerce and ETRI (Electronics and Telecommunications Research Institute), Korea — cybersecurity and zero-day threat detection.'
 
-export const DATASETS = ['Meraz\'18', 'Drebin', 'EMBER'] as const
+export const DATASETS = ["Meraz'18", 'Drebin', 'EMBER'] as const

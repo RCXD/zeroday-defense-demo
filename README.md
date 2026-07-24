@@ -26,7 +26,7 @@ npm run build
 | Path | Description |
 |------|-------------|
 | `frontend/` | Vite + React + TypeScript + Tailwind interactive demo |
-| `frontend/public/figures/` | Result figures recovered from experiment notebooks |
+| `frontend/src/diagrams/` | Original illustrative charts (SVG / Recharts) — not paper figure copies |
 | `assets/papers/` | Local copies of papers and thesis for **private use only** — not redistributed by the demo |
 
 ## Publications (DOI links only)

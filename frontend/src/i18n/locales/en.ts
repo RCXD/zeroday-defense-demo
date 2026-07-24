@@ -104,22 +104,22 @@ export const en: Messages = {
   },
   results: {
     eyebrow: 'The results',
-    title: 'Recorded experiment figures — no synthetic numbers',
+    title: 'Illustrative charts of the same evaluation story',
     subtitle:
-      'Rather than approximating bar-chart values, this explorer shows the original result figures recovered from the experiment archive. Select a gallery image or an approach heatmap to inspect.',
-    galleryTitle: 'Key result figures',
+      'Diagrams below recreate the paper’s evaluation themes — model comparison, threshold sensitivity, adversarial resilience — as original interactive charts (not copies of published figures).',
+    galleryTitle: 'Key result views',
     galleryNote:
-      'Illustrative charts from recorded experiments — OC classifiers (OCSVM, IF, LOF, EE) compared against AE-threshold and AEOCC variants.',
-    heatmapTitle: 'Approach hyperparameter heatmaps',
+      'Illustrative charts: OC classifiers (OCSVM, IF, LOF, EE) vs AE-threshold vs AEOCC, plus adversarial UMAP-style views.',
+    heatmapTitle: 'Approach hyperparameter grids',
     heatmapBody:
-      'Each heatmap sweeps architecture and training hyperparameters. Brighter regions indicate stronger zero-day detection under the profiling-based evaluation protocol.',
+      'Each grid sweeps architecture / training settings. Higher scores indicate stronger zero-day detection under a profiling-based protocol.',
     galleryCaptions: {
-      'model-comparison': 'OC classifiers vs. AE-threshold vs. AEOCC (with error bars)',
-      'aeocc-bar': 'AEOCC variants across model-selection criteria',
+      'model-comparison': 'OC classifiers vs. AE-threshold vs. AEOCC (illustrative)',
+      'aeocc-bar': 'AEOCC highlighted against baseline detectors',
       'ae-thresholds': 'Sensitivity of AE profiling to manual threshold selection',
-      perturbation: 'Impact of feature perturbation on detection stability',
-      'umap-fgm': 'UMAP embedding under adversarial FGM perturbation (ε=0.05)',
-      'umap-hsj': 'UMAP embedding under HopSkipJump adversarial attack',
+      perturbation: 'Detection under feature perturbation (AEOCC vs supervised)',
+      'umap-fgm': 'UMAP-style embedding under adversarial FGM perturbation',
+      'umap-hsj': 'UMAP-style embedding under HopSkipJump adversarial attack',
     },
   },
   research: {

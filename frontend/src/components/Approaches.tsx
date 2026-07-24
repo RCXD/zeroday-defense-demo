@@ -2,6 +2,7 @@ import { useMemo, useState } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { Section } from './Section'
 import { APPROACHES } from '../data/research'
+import { HeatmapDiagram } from '../diagrams/HeatmapDiagram'
 import { useLanguage } from '../i18n/LanguageContext'
 
 export function Approaches() {
@@ -50,7 +51,7 @@ export function Approaches() {
                       : 'bg-neutral-100 text-neutral-500 dark:bg-neutral-800 dark:text-neutral-400'
                   }`}
                 >
-                  {a.id}
+                  {a.id.slice(0, 3)}
                 </span>
                 <span>
                   <span className="block font-semibold text-neutral-900 dark:text-white">
@@ -75,13 +76,8 @@ export function Approaches() {
               transition={{ duration: 0.3 }}
               className="grid gap-6 md:grid-cols-2 md:items-center"
             >
-              <div className="overflow-hidden rounded-xl border border-neutral-200 bg-neutral-50 p-2 dark:border-neutral-800 dark:bg-neutral-950">
-                <img
-                  src={active.figure}
-                  alt={`${active.name} hyperparameter heatmap`}
-                  className="mx-auto h-auto w-full"
-                  loading="lazy"
-                />
+              <div className="overflow-hidden rounded-xl border border-neutral-200 bg-neutral-50 p-3 dark:border-neutral-800 dark:bg-neutral-950">
+                <HeatmapDiagram approachKey={active.key} />
               </div>
               <div>
                 <span className="inline-block rounded-md bg-neutral-100 px-2.5 py-1 font-mono text-xs font-semibold uppercase text-neutral-500 dark:bg-neutral-800 dark:text-neutral-400">
