@@ -10,6 +10,7 @@ export function Nav({ theme, onToggle }: { theme: string; onToggle: () => void }
 
   const links = [
     { href: '#overview', label: t.nav.overview },
+    { href: '#story', label: t.nav.story },
     { href: '#approaches', label: t.nav.approaches },
     { href: '#results', label: t.nav.results },
     { href: '#research', label: t.nav.research },

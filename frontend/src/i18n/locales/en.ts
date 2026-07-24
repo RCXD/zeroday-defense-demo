@@ -25,6 +25,7 @@ export const en: Messages = {
     results: 'Results',
     research: 'Research',
     team: 'Team',
+    story: 'Background',
     toggleTheme: 'Toggle color theme',
   },
   hero: {
@@ -62,6 +63,52 @@ export const en: Messages = {
         title: 'Meraz\'18, Drebin & EMBER',
         body: 'Experiments span three public Android malware datasets from the research archive, covering diverse feature representations and zero-day holdout splits.',
       },
+    },
+  },
+  contributions: {
+    eyebrow: 'Research narrative',
+    title: 'What prior work missed — and how we addressed it',
+    subtitle:
+      'The published work does more than report accuracy numbers: it diagnoses gaps in semi-supervised zero-day detection, proposes a threshold-free hybrid architecture, and analyzes resilience when attackers craft evasion samples.',
+    problem: {
+      title: 'Limitations the papers call out',
+      body:
+        'Existing malware detection research often assumes known attack patterns. The Big Data 2021 and TNSM 2023 studies argue that semi-supervised alternatives each solve only part of the problem.',
+      bullets: [
+        'Signature-based and supervised detectors cannot generalize to never-before-seen malware families without constant retraining.',
+        'Standalone one-class classifiers (OCSVM, Isolation Forest, LOF) avoid manual thresholds but tend to show relatively low detection rates on complex Android permission/API profiles.',
+        'Profiling with autoencoders can separate malware more strongly, but performance hinges on finding an “ideal” reconstruction-error threshold — sensitive to dataset, architecture, and hyperparameters.',
+      ],
+    },
+    solution: {
+      title: 'Threshold-free AE + OCC (AEOCC)',
+      body:
+        'The core proposal combines neural abstraction from the autoencoder with one-class classification so operators no longer tune reconstruction thresholds by hand.',
+      bullets: [
+        'Merge autoencoding and OC classification to keep strong feature abstraction while removing fragile threshold selection.',
+        'Address concurrent AE+OCC training — where no malware labels are available at training time — with a model-selection procedure (AEOCC) that picks well-suited learner pairs.',
+        'Report up to ~96% zero-day detection on Meraz\'18 (Big Data 2021) and 97.1% on Meraz\'18 and Drebin (TNSM 2023), comparable to supervised baselines limited to known malware.',
+      ],
+    },
+    adversarial: {
+      title: 'Adversarial evasion insight',
+      body:
+        'Beyond accuracy on holdout families, the papers ask whether detectors survive when attackers perturb feature vectors to evade the decision boundary.',
+      bullets: [
+        'Supervised models learn boundaries from labeled malware and can be pushed across them by gradient-based (FGM) or query-based (HopSkipJump) evasion attacks.',
+        'Big Data 2021: the hybrid AEOCC identifies synthetic evasion samples more reliably than supervised learners trained on known malware.',
+        'TNSM 2023: formal evasion experiments show profiling-based AEOCC maintaining over 99% detection on perturbed malware variants — robustness from modeling benign behavior instead of memorizing attack signatures.',
+      ],
+    },
+    venues: {
+      title: 'Where this research was presented',
+      body:
+        'Published and peer-reviewed at IEEE venues; the MS thesis documents the full experimental archive behind this demo.',
+      items: [
+        'IEEE International Conference on Big Data (BigData 2021) · Orlando, FL · Dec 15–18, 2021',
+        'IEEE Transactions on Network and Service Management (TNSM) · Vol. 20, No. 3 · Sep 2023',
+        'MS Thesis, Texas A&M University–Commerce · Fall 2022',
+      ],
     },
   },
   approaches: {
@@ -136,6 +183,13 @@ export const en: Messages = {
     subtitle:
       'Peer-reviewed papers and thesis behind this demo. IEEE articles are linked via DOI only — PDFs are not redistributed here.',
     thesisLabel: 'MS Thesis',
+    presentations: {
+      'bigdata-2021':
+        'Presented at IEEE Big Data 2021 (Orlando, FL · Dec 15–18, 2021) · short paper',
+      'tnsm-2023':
+        'Published in IEEE TNSM · Vol. 20, No. 3, pp. 3900–3914 · Sep 2023',
+      'thesis-2022': 'MS Thesis · Texas A&M University–Commerce · Fall 2022',
+    },
     abstracts: {
       'bigdata-2021':
         'Combines autoencoding and one-class classification to benefit from neural-network abstractions while removing the need for complex threshold selection — addressing limitations of standalone OC classifiers and threshold-sensitive AE profiling.',

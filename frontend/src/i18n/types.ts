@@ -20,6 +20,7 @@ export type Messages = {
     research: string
     team: string
     toggleTheme: string
+    story: string
   }
   hero: {
     badge: string
@@ -47,6 +48,15 @@ export type Messages = {
       datasets: { title: string; body: string }
     }
   }
+  contributions: {
+    eyebrow: string
+    title: string
+    subtitle: string
+    problem: { title: string; body: string; bullets: string[] }
+    solution: { title: string; body: string; bullets: string[] }
+    adversarial: { title: string; body: string; bullets: string[] }
+    venues: { title: string; body: string; items: string[] }
+  }
   approaches: {
     eyebrow: string
     title: string
@@ -69,6 +79,7 @@ export type Messages = {
     title: string
     subtitle: string
     thesisLabel: string
+    presentations: Record<string, string>
     abstracts: Record<string, string>
   }
   team: {

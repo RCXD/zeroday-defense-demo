@@ -25,6 +25,7 @@ export const de: Messages = {
     results: 'Ergebnisse',
     research: 'Forschung',
     team: 'Team',
+    story: 'Hintergrund',
     toggleTheme: 'Farbschema umschalten',
   },
   hero: {
@@ -62,6 +63,52 @@ export const de: Messages = {
         title: 'Meraz\'18, Drebin & EMBER',
         body: 'Experimente umfassen drei öffentliche Android-Malware-Datensätze aus dem Forschungsarchiv mit verschiedenen Merkmalsdarstellungen und Zero-Day-Holdout-Splits.',
       },
+    },
+  },
+  contributions: {
+    eyebrow: 'Forschungsnarrativ',
+    title: 'Was frühere Arbeiten verpassten — und wie wir es adressierten',
+    subtitle:
+      'Die Publikationen berichten mehr als Genauigkeit: Sie diagnostizieren Lücken bei semi-überwachter Zero-Day-Erkennung, schlagen eine schwellenwertfreie Hybridarchitektur vor und analysieren Resilienz gegen Evasionsmuster.',
+    problem: {
+      title: 'In der Literatur benannte Grenzen',
+      body:
+        'Viele Malware-Studien setzen bekannte Angriffsmuster voraus. Big Data 2021 und TNSM 2023 argumentieren, dass jede semi-überwachte Alternative nur einen Teil des Problems löst.',
+      bullets: [
+        'Signaturbasierte und überwachte Detektoren generalisieren nicht auf nie gesehene Familien ohne ständiges Nachtraining.',
+        'Eigenständige One-Class-Klassifikatoren (OCSVM, Isolation Forest, LOF) vermeiden manuelle Schwellenwerte, zeigen aber oft relativ niedrige Erkennungsraten bei komplexen Android-Berechtigungs-/API-Profilen.',
+        'Autoencoder-Profilierung trennt Malware stärker, hängt aber von einem „idealen“ Rekonstruktionsfehler-Schwellenwert ab — empfindlich gegenüber Datensatz, Architektur und Hyperparametern.',
+      ],
+    },
+    solution: {
+      title: 'Schwellenwertfreier AE + OCC (AEOCC)',
+      body:
+        'Der Kernvorschlag kombiniert neuronale Abstraktion des Autoencoders mit One-Class-Klassifikation, sodass Betreiber Rekonstruktionsschwellen nicht manuell justieren müssen.',
+      bullets: [
+        'Verbindet Autoencoding und OC-Klassifikation für starke Merkmalsabstraktion ohne fragile Schwellenwertwahl.',
+        'Adressiert gleichzeitiges AE+OCC-Training — ohne Malware-Labels — mit einem Modellauswahlverfahren (AEOCC).',
+        'Berichtet bis ~96% auf Meraz\'18 (Big Data 2021) und 97,1% auf Meraz\'18 und Drebin (TNSM 2023), vergleichbar mit überwachten Baselines für bekannte Malware.',
+      ],
+    },
+    adversarial: {
+      title: 'Einsicht zu adversarialer Evasion',
+      body:
+        'Über Holdout-Familien-Genauigkeit hinaus prüfen die Artikel, ob Detektoren standhalten, wenn Angreifer Merkmalsvektoren stören.',
+      bullets: [
+        'Überwachte Modelle lernen Grenzen aus gelabelter Malware und können durch gradientenbasierte (FGM) oder abfragebasierte (HopSkipJump) Evasion angegriffen werden.',
+        'Big Data 2021: das AEOCC-Hybrid erkennt synthetische Evasionssamples zuverlässiger als überwachte Lernverfahren mit bekannter Malware.',
+        'TNSM 2023: formale Evasionsexperimente zeigen profilbasiertes AEOCC mit >99% Erkennung bei perturbierten Malware-Varianten — Robustheit durch Modellierung benignen Verhaltens statt Angriffssignaturen.',
+      ],
+    },
+    venues: {
+      title: 'Wo diese Forschung präsentiert wurde',
+      body:
+        'Begutachtet in IEEE-Foren veröffentlicht; die Masterarbeit dokumentiert das vollständige Experimentarchiv hinter dieser Demo.',
+      items: [
+        'IEEE International Conference on Big Data (BigData 2021) · Orlando, FL · 15.–18. Dez. 2021',
+        'IEEE Transactions on Network and Service Management (TNSM) · Bd. 20, Nr. 3 · Sep. 2023',
+        'Masterarbeit, Texas A&M University–Commerce · Herbst 2022',
+      ],
     },
   },
   approaches: {
@@ -136,6 +183,13 @@ export const de: Messages = {
     subtitle:
       'Begutachtete Artikel und Thesis hinter dieser Demo. IEEE-Artikel werden nur per DOI verlinkt — PDFs werden hier nicht weiterverteilt.',
     thesisLabel: 'Masterarbeit',
+    presentations: {
+      'bigdata-2021':
+        'Präsentiert auf IEEE Big Data 2021 (Orlando, FL · 15.–18. Dez. 2021) · Kurzbeitrag',
+      'tnsm-2023':
+        'Veröffentlicht in IEEE TNSM · Bd. 20, Nr. 3, S. 3900–3914 · Sep. 2023',
+      'thesis-2022': 'Masterarbeit · Texas A&M University–Commerce · Herbst 2022',
+    },
     abstracts: {
       'bigdata-2021':
         'Kombiniert Autoencoding und One-Class-Klassifikation, um von neuronalen Abstraktionen zu profitieren und komplexe Schwellenwertwahl zu vermeiden — und adressiert Grenzen eigenständiger OC-Klassifikatoren sowie schwellenwertsensitiver AE-Profilierung.',

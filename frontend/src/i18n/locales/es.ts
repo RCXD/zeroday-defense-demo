@@ -25,6 +25,7 @@ export const es: Messages = {
     results: 'Resultados',
     research: 'Investigación',
     team: 'Equipo',
+    story: 'Contexto',
     toggleTheme: 'Cambiar tema de color',
   },
   hero: {
@@ -62,6 +63,52 @@ export const es: Messages = {
         title: 'Meraz\'18, Drebin y EMBER',
         body: 'Los experimentos abarcan tres conjuntos públicos de malware Android del archivo de investigación, con diversas representaciones de características y particiones zero-day.',
       },
+    },
+  },
+  contributions: {
+    eyebrow: 'Relato de investigación',
+    title: 'Lo que faltaba en trabajos previos — y cómo lo abordamos',
+    subtitle:
+      'Los artículos no solo reportan precisión: diagnostican brechas en la detección zero-day semi-supervisada, proponen una arquitectura híbrida sin umbral y analizan la resiliencia ante muestras de evasión.',
+    problem: {
+      title: 'Limitaciones señaladas en la literatura',
+      body:
+        'Mucha investigación en malware asume patrones conocidos. Los estudios Big Data 2021 y TNSM 2023 argumentan que cada alternativa semi-supervisada resuelve solo parte del problema.',
+      bullets: [
+        'Detectores basados en firmas y aprendizaje supervisado no generalizan a familias nunca vistas sin reentrenamiento constante.',
+        'Clasificadores de una clase independientes (OCSVM, Isolation Forest, LOF) evitan umbrales manuales pero suelen mostrar tasas de detección relativamente bajas en perfiles complejos de permisos/API de Android.',
+        'El perfilado con autoencoders separa mejor el malware, pero el rendimiento depende de un umbral “ideal” de error de reconstrucción — frágil ante dataset, arquitectura e hiperparámetros.',
+      ],
+    },
+    solution: {
+      title: 'Híbrido AE + OCC sin umbral (AEOCC)',
+      body:
+        'La propuesta central combina la abstracción neuronal del autoencoder con clasificación de una clase para que los operadores no ajusten umbrales de reconstrucción a mano.',
+      bullets: [
+        'Fusiona autoencoding y clasificación OC para mantener abstracción fuerte eliminando la selección frágil de umbrales.',
+        'Aborda el entrenamiento concurrente AE+OCC — sin etiquetas de malware en entrenamiento — con un procedimiento de selección de modelos (AEOCC).',
+        'Reporta hasta ~96% en Meraz\'18 (Big Data 2021) y 97,1% en Meraz\'18 y Drebin (TNSM 2023), comparable a baselines supervisados limitados a malware conocido.',
+      ],
+    },
+    adversarial: {
+      title: 'Perspectiva sobre evasión adversarial',
+      body:
+        'Más allá de la precisión en familias reservadas, los artículos preguntan si los detectores resisten cuando los atacantes perturban vectores de características.',
+      bullets: [
+        'Los modelos supervisados aprenden fronteras con malware etiquetado y pueden cruzarlas con ataques basados en gradientes (FGM) o consultas (HopSkipJump).',
+        'Big Data 2021: el híbrido AEOCC identifica muestras sintéticas de evasión con más fiabilidad que aprendices supervisados entrenados con malware conocido.',
+        'TNSM 2023: experimentos formales de evasión muestran AEOCC basado en perfilado manteniendo >99% de detección en variantes perturbadas — robustez por modelar comportamiento benigno, no memorizar firmas de ataque.',
+      ],
+    },
+    venues: {
+      title: 'Dónde se presentó esta investigación',
+      body:
+        'Publicada y revisada por pares en foros IEEE; la tesis de maestría documenta el archivo experimental completo detrás de esta demo.',
+      items: [
+        'IEEE International Conference on Big Data (BigData 2021) · Orlando, FL · 15–18 dic 2021',
+        'IEEE Transactions on Network and Service Management (TNSM) · Vol. 20, No. 3 · sep 2023',
+        'Tesis de maestría, Texas A&M University–Commerce · otoño 2022',
+      ],
     },
   },
   approaches: {
@@ -136,6 +183,13 @@ export const es: Messages = {
     subtitle:
       'Artículos revisados por pares y tesis detrás de esta demo. Los artículos IEEE se enlazan solo por DOI — no se redistribuyen PDFs aquí.',
     thesisLabel: 'Tesis de maestría',
+    presentations: {
+      'bigdata-2021':
+        'Presentado en IEEE Big Data 2021 (Orlando, FL · 15–18 dic 2021) · artículo corto',
+      'tnsm-2023':
+        'Publicado en IEEE TNSM · Vol. 20, No. 3, pp. 3900–3914 · sep 2023',
+      'thesis-2022': 'Tesis de maestría · Texas A&M University–Commerce · otoño 2022',
+    },
     abstracts: {
       'bigdata-2021':
         'Combina autoencoding y clasificación de una clase para aprovechar las abstracciones de redes neuronales eliminando la necesidad de umbrales complejos — abordando limitaciones de clasificadores OC independientes y del perfilado AE sensible al umbral.',

@@ -25,6 +25,7 @@ export const ko: Messages = {
     results: '실험 결과',
     research: '연구',
     team: '연구팀',
+    story: '연구 배경',
     toggleTheme: '테마 전환',
   },
   hero: {
@@ -62,6 +63,52 @@ export const ko: Messages = {
         title: 'Meraz\'18, Drebin & EMBER',
         body: '연구 아카이브의 세 가지 공개 Android 악성코드 데이터셋에서 실험했으며, 다양한 특징 표현과 제로데이 홀드아웃 분할을 다룹니다.',
       },
+    },
+  },
+  contributions: {
+    eyebrow: '연구 배경',
+    title: '기존 연구의 한계와 이를 해결한 접근',
+    subtitle:
+      '본 연구는 단순한 정확도 보고를 넘어, 반지도 제로데이 탐지의 구조적 한계를 짚고, 임계값 없는 하이브리드 아키텍처를 제안하며, 공격자가 회피 샘플을 만들 때의 강건성까지 분석합니다.',
+    problem: {
+      title: '논문이 지적한 기존 연구의 한계',
+      body:
+        '많은 악성코드 탐지 연구는 이미 알려진 공격 패턴을 전제로 합니다. Big Data 2021·TNSM 2023 논문은 반지도 대안마다 해결하지 못하는 부분이 있다고 봅니다.',
+      bullets: [
+        '시그니처 기반·지도 학습 탐지기는 지속적인 재학습 없이는 한 번도 보지 못한 악성코드 패밀리로 일반화하기 어렵습니다.',
+        '독립적인 원클래스 분류기(OCSVM, Isolation Forest, LOF)는 수동 임계값이 필요 없지만, 복잡한 Android 권한·API 프로파일에서는 상대적으로 낮은 탐지율을 보이는 경우가 많습니다.',
+        '오토인코더 프로파일링은 악성코드를 더 잘 분리할 수 있지만, 재구성 오차의 “이상적인” 임계값 설정에 성능이 크게 좌우됩니다. 데이터셋·아키텍처·하이퍼파라미터에 민감합니다.',
+      ],
+    },
+    solution: {
+      title: '임계값 없는 AE + OCC (AEOCC)',
+      body:
+        '핵심 제안은 오토인코더의 신경망 추상화와 원클래스 분류를 결합해, 운영자가 재구성 임계값을 수동으로 맞출 필요가 없도록 하는 것입니다.',
+      bullets: [
+        '오토인코딩과 OC 분류를 결합해 강한 특징 추상화를 유지하면서 깨지기 쉬운 임계값 선택을 제거합니다.',
+        '학습 시 악성코드 레이블이 없는 동시 AE+OCC 학습 문제를, 적합한 학습기 쌍을 고르는 모델 선택 절차(AEOCC)로 해결합니다.',
+        'Meraz\'18에서 최대 약 96%(Big Data 2021), Meraz\'18·Drebin에서 97.1%(TNSM 2023)를 보고했으며, 알려진 악성코드에 한정된 지도 학습 베이스라인과 비슷한 수준입니다.',
+      ],
+    },
+    adversarial: {
+      title: '적대적 회피 공격에 대한 시사점',
+      body:
+        '홀드아웃 패밀리 정확도뿐 아니라, 공격자가 특징 벡터를 교란해 결정 경계를 넘을 때 탐지기가 버티는지를 논문은 함께 검토합니다.',
+      bullets: [
+        '지도 학습 모델은 레이블된 악성코드로 경계를 학습하므로, FGM 같은 그래디언트 기반·HopSkipJump 같은 쿼리 기반 회피 공격에 취약할 수 있습니다.',
+        'Big Data 2021: 하이브리드 AEOCC가 알려진 악성코드로 학습한 지도 모델보다 탐지를 회피하도록 만든 합성 샘플을 더 안정적으로 식별합니다.',
+        'TNSM 2023: 공식적인 회피 실험에서 프로파일링 기반 AEOCC가 교란된 악성코드 변종에 대해 99% 이상 탐지율을 유지합니다. 공격 시그니처를 외우는 대신 정상 행동을 모델링하기 때문입니다.',
+      ],
+    },
+    venues: {
+      title: '연구가 발표·게재된 곳',
+      body:
+        'IEEE 동료심사 학회·저널에 게재되었으며, 석사 학위 논문에 본 데모의 실험 아카이브가 정리되어 있습니다.',
+      items: [
+        'IEEE International Conference on Big Data (BigData 2021) · Orlando, FL · 2021년 12월 15–18일',
+        'IEEE Transactions on Network and Service Management (TNSM) · 제20권 제3호 · 2023년 9월',
+        '석사 학위 논문, Texas A&M University–Commerce · 2022년 가을',
+      ],
     },
   },
   approaches: {
@@ -136,6 +183,13 @@ export const ko: Messages = {
     subtitle:
       '본 데모의 기반이 된 동료심사 논문과 학위 논문입니다. IEEE 논문은 DOI 링크만 제공하며, PDF는 재배포하지 않습니다.',
     thesisLabel: '석사 학위 논문',
+    presentations: {
+      'bigdata-2021':
+        'IEEE Big Data 2021 발표 (Orlando, FL · 2021.12.15–18) · short paper',
+      'tnsm-2023':
+        'IEEE TNSM 게재 · 제20권 제3호, pp. 3900–3914 · 2023년 9월',
+      'thesis-2022': '석사 학위 논문 · Texas A&M University–Commerce · 2022년 가을',
+    },
     abstracts: {
       'bigdata-2021':
         '오토인코딩과 원클래스 분류를 결합해 신경망의 표현력을 활용하면서도 복잡한 임계값 선택을 없앱니다. 독립적인 OC 분류기와 임계값에 민감한 AE 프로파일링의 한계를 해소합니다.',
