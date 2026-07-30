@@ -1,5 +1,6 @@
 import { AnimatePresence, motion } from 'framer-motion'
 import { useLanguage } from '../i18n/LanguageContext'
+import { RichText } from '../i18n/RichText'
 import { useAutoPhase } from '../hooks/useAutoPhase'
 import { PhaseStepDots } from './PhaseStepDots'
 
@@ -43,7 +44,7 @@ function PanelCaption({ text }: { text: string }) {
       transition={{ duration: 0.4 }}
       className="min-h-[3.5rem] text-center text-xs leading-snug text-neutral-500 dark:text-neutral-400 md:text-sm"
     >
-      {text}
+      <RichText text={text} />
     </motion.p>
   )
 }
@@ -217,7 +218,7 @@ function AePanel({
   return (
     <div className="relative flex flex-col">
       <h4 className="mb-3 px-1 font-display text-sm font-semibold text-neutral-900 dark:text-white md:text-base">
-        {title}
+        <RichText text={title} />
       </h4>
       <div className="relative overflow-hidden rounded-xl border border-neutral-200 bg-neutral-50/80 dark:border-neutral-800 dark:bg-neutral-950/60">
         <svg viewBox="0 0 360 280" className="relative h-auto w-full" role="img" aria-hidden>
@@ -376,7 +377,7 @@ function OccPanel({
   return (
     <div className="relative flex flex-col">
       <h4 className="mb-3 px-1 font-display text-sm font-semibold text-neutral-900 dark:text-white md:text-base">
-        {title}
+        <RichText text={title} />
       </h4>
       <div className="relative overflow-hidden rounded-xl border border-neutral-200 bg-neutral-50/80 dark:border-neutral-800 dark:bg-neutral-950/60">
         <svg viewBox="0 0 360 280" className="relative h-auto w-full" role="img" aria-hidden>
@@ -536,7 +537,9 @@ function AeOccPanel({
   return (
     <div className="relative flex flex-col">
       <div className="mb-3 flex items-center justify-between gap-2 px-1">
-        <h4 className="font-display text-sm font-semibold text-neutral-900 dark:text-white md:text-base">{title}</h4>
+        <h4 className="font-display text-sm font-semibold text-neutral-900 dark:text-white md:text-base">
+          <RichText text={title} />
+        </h4>
         {showFull && (
           <div className="flex flex-wrap justify-end gap-1">
             <motion.span
@@ -706,7 +709,9 @@ export function AeOccCompareAnimation() {
     <div className="overflow-hidden rounded-2xl border border-neutral-200 bg-white p-5 dark:border-neutral-800 dark:bg-neutral-900 md:p-6">
       <div className="mb-4 flex flex-col gap-2 sm:flex-row sm:items-end sm:justify-between">
         <div>
-          <h3 className="font-display text-lg font-semibold text-neutral-900 dark:text-white md:text-xl">{c.title}</h3>
+          <h3 className="font-display text-lg font-semibold text-neutral-900 dark:text-white md:text-xl">
+            <RichText text={c.title} />
+          </h3>
           <p className="mt-1 text-sm font-medium text-accent-600 dark:text-accent-400">
             {c.stepLabel} {phase + 1}/{PHASE_COUNT}: {c.stepNames[phase]}
           </p>

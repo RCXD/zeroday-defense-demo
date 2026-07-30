@@ -1,6 +1,7 @@
 import { motion } from 'framer-motion'
 import { AlertTriangle, Lightbulb, Shield, MapPin } from 'lucide-react'
 import { Section } from './Section'
+import { RichText } from '../i18n/RichText'
 import { useLanguage } from '../i18n/LanguageContext'
 
 const BLOCKS = [
@@ -14,7 +15,7 @@ export function Contributions() {
 
   return (
     <Section
-      id="story"
+      id="contributions"
       eyebrow={t.contributions.eyebrow}
       title={t.contributions.title}
       subtitle={t.contributions.subtitle}
@@ -35,10 +36,10 @@ export function Contributions() {
                 <Icon className="h-6 w-6" />
               </div>
               <h3 className="font-display text-lg font-semibold text-neutral-900 dark:text-white">
-                {block.title}
+                <RichText text={block.title} />
               </h3>
               <p className="mt-3 text-sm leading-relaxed text-neutral-600 dark:text-neutral-400">
-                {block.body}
+                <RichText text={block.body} />
               </p>
               <ul className="mt-4 space-y-2.5">
                 {block.bullets.map((item) => (
@@ -47,7 +48,9 @@ export function Contributions() {
                     className="flex gap-2.5 text-sm leading-relaxed text-neutral-600 dark:text-neutral-400"
                   >
                     <span className="mt-2 h-1.5 w-1.5 shrink-0 rounded-full bg-accent-500" />
-                    <span>{item}</span>
+                    <span>
+                      <RichText text={item} />
+                    </span>
                   </li>
                 ))}
               </ul>
@@ -68,11 +71,11 @@ export function Contributions() {
             <MapPin className="h-5 w-5" />
           </span>
           <h3 className="font-display text-lg font-semibold text-neutral-900 dark:text-white">
-            {t.contributions.venues.title}
+            <RichText text={t.contributions.venues.title} />
           </h3>
         </div>
         <p className="text-sm leading-relaxed text-neutral-600 dark:text-neutral-400">
-          {t.contributions.venues.body}
+          <RichText text={t.contributions.venues.body} />
         </p>
         <ul className="mt-5 grid gap-3 sm:grid-cols-2">
           {t.contributions.venues.items.map((item) => (
@@ -80,7 +83,7 @@ export function Contributions() {
               key={item}
               className="rounded-xl border border-neutral-200 bg-white px-4 py-3 text-sm leading-relaxed text-neutral-700 dark:border-neutral-800 dark:bg-neutral-950 dark:text-neutral-300"
             >
-              {item}
+              <RichText text={item} />
             </li>
           ))}
         </ul>

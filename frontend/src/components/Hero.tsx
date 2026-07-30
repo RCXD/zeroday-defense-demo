@@ -2,6 +2,7 @@ import { motion } from 'framer-motion'
 import { ArrowRight } from 'lucide-react'
 import { HEADLINE } from '../data/research'
 import { fill } from '../i18n'
+import { RichText } from '../i18n/RichText'
 import { useLanguage } from '../i18n/LanguageContext'
 
 export function Hero() {
@@ -45,8 +46,10 @@ export function Hero() {
           className="mt-5 max-w-3xl text-2xl font-medium leading-snug text-neutral-700 md:text-3xl dark:text-neutral-300"
         >
           {t.hero.titleBefore}
-          <span className="text-accent-600 dark:text-accent-400">{t.hero.titleAccent}</span>
-          {t.hero.titleAfter}
+          <span className="text-accent-600 dark:text-accent-400">
+            <RichText text={t.hero.titleAccent} />
+          </span>
+          <RichText text={t.hero.titleAfter} />
         </motion.p>
 
         <motion.p
@@ -55,7 +58,7 @@ export function Hero() {
           transition={{ duration: 0.6, delay: 0.15 }}
           className="mt-6 max-w-2xl text-lg leading-relaxed text-neutral-600 md:text-xl dark:text-neutral-400"
         >
-          {fill(t.hero.subtitle, { detection: HEADLINE.bestDetection })}
+          <RichText text={fill(t.hero.subtitle, { detection: HEADLINE.bestDetection })} />
         </motion.p>
 
         <motion.div

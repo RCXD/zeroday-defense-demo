@@ -1,11 +1,20 @@
 import { motion } from 'framer-motion'
-import { Award, ExternalLink } from 'lucide-react'
-import { PATHWAYS_ARTICLE_URL } from '../data/research'
+import { Award, ExternalLink, FileText } from 'lucide-react'
+import { PATHWAYS_ARTICLE_URL, PATHWAYS_ASSETS, PATHWAYS_WINNERS_PDF_URL } from '../data/research'
 import { useLanguage } from '../i18n/LanguageContext'
+
+function assetUrl(path: string) {
+  const base = import.meta.env.BASE_URL
+  return `${base}${path.replace(/^\//, '')}`
+}
 
 export function PathwaysSpotlight() {
   const { t } = useLanguage()
   const p = t.pathways
+  const logoSrc = assetUrl(PATHWAYS_ASSETS.logo)
+  const evidenceSrc = assetUrl(PATHWAYS_ASSETS.evidence)
+  const hostLogoSrc = assetUrl(PATHWAYS_ASSETS.hostLogo)
+  const pdfLocalSrc = assetUrl(PATHWAYS_ASSETS.pdfLocal)
 
   const rows = [
     { label: p.labels.event, value: p.event },
@@ -30,8 +39,20 @@ export function PathwaysSpotlight() {
           transition={{ duration: 0.5 }}
           className="rounded-2xl border border-accent-200/80 bg-white p-6 shadow-sm dark:border-accent-500/20 dark:bg-neutral-900 md:p-8"
         >
-          <div className="mb-6 flex flex-col gap-4 md:flex-row md:items-start md:justify-between">
+          <div className="mb-6 flex flex-col gap-5 md:flex-row md:items-start md:justify-between">
             <div className="max-w-2xl">
+              <a
+                href={PATHWAYS_WINNERS_PDF_URL}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="mb-4 inline-block"
+              >
+                <img
+                  src={logoSrc}
+                  alt={p.logoAlt}
+                  className="h-auto w-full max-w-md object-contain dark:brightness-110"
+                />
+              </a>
               <p className="mb-2 text-sm font-semibold uppercase tracking-widest text-accent-600 dark:text-accent-400">
                 {p.eyebrow}
               </p>
@@ -65,19 +86,71 @@ export function PathwaysSpotlight() {
             ))}
           </dl>
 
+          <figure className="mt-6 overflow-hidden rounded-xl border border-neutral-200 bg-white dark:border-neutral-800">
+            <a href={PATHWAYS_WINNERS_PDF_URL} target="_blank" rel="noopener noreferrer" className="block">
+              <img
+                src={evidenceSrc}
+                alt={p.evidenceAlt}
+                className="h-auto w-full object-contain"
+              />
+            </a>
+            <figcaption className="border-t border-neutral-200 px-4 py-3 text-xs leading-relaxed text-neutral-500 dark:border-neutral-800 dark:text-neutral-400 md:text-sm">
+              {p.evidenceCaption}{' '}
+              <a
+                href={PATHWAYS_WINNERS_PDF_URL}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center gap-1 font-medium text-accent-600 hover:text-accent-700 dark:text-accent-400"
+              >
+                <FileText className="h-3.5 w-3.5" />
+                {p.officialSourceLink}
+              </a>
+            </figcaption>
+          </figure>
+
           <p className="mt-5 text-xs leading-relaxed text-neutral-500 dark:text-neutral-400">{p.categoryNote}</p>
 
-          <div className="mt-5 flex flex-wrap items-center gap-x-4 gap-y-2 text-sm">
-            <span className="text-neutral-500 dark:text-neutral-400">{p.sourceLabel}</span>
-            <a
-              href={PATHWAYS_ARTICLE_URL}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="inline-flex items-center gap-1.5 font-medium text-accent-600 transition-colors hover:text-accent-700 dark:text-accent-400 dark:hover:text-accent-300"
-            >
-              {p.sourceLink}
-              <ExternalLink className="h-3.5 w-3.5" />
-            </a>
+          <div className="mt-5 flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
+            <div className="flex flex-col gap-2 text-sm">
+              <div className="flex flex-wrap items-center gap-x-4 gap-y-2">
+                <span className="text-neutral-500 dark:text-neutral-400">{p.officialSourceLabel}</span>
+                <a
+                  href={PATHWAYS_WINNERS_PDF_URL}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex items-center gap-1.5 font-medium text-accent-600 transition-colors hover:text-accent-700 dark:text-accent-400 dark:hover:text-accent-300"
+                >
+                  {p.officialSourceLink}
+                  <ExternalLink className="h-3.5 w-3.5" />
+                </a>
+                <a
+                  href={pdfLocalSrc}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex items-center gap-1.5 text-neutral-500 transition-colors hover:text-accent-600 dark:text-neutral-400"
+                >
+                  <FileText className="h-3.5 w-3.5" />
+                  PDF
+                </a>
+              </div>
+              <div className="flex flex-wrap items-center gap-x-4 gap-y-2">
+                <span className="text-neutral-500 dark:text-neutral-400">{p.sourceLabel}</span>
+                <a
+                  href={PATHWAYS_ARTICLE_URL}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex items-center gap-1.5 font-medium text-accent-600 transition-colors hover:text-accent-700 dark:text-accent-400 dark:hover:text-accent-300"
+                >
+                  {p.sourceLink}
+                  <ExternalLink className="h-3.5 w-3.5" />
+                </a>
+              </div>
+            </div>
+            <img
+              src={hostLogoSrc}
+              alt={p.hostLogoAlt}
+              className="h-10 w-auto rounded-sm object-contain shadow-sm sm:h-12"
+            />
           </div>
         </motion.div>
       </div>

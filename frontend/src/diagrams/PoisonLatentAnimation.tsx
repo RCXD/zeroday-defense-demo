@@ -1,5 +1,6 @@
 import { AnimatePresence, motion } from 'framer-motion'
 import { useLanguage } from '../i18n/LanguageContext'
+import { RichText } from '../i18n/RichText'
 import { useAutoPhase } from '../hooks/useAutoPhase'
 import { PhaseStepDots } from './PhaseStepDots'
 import { PoisonLatentScene, POISON_SCENE_PHASE_COUNT, type PoisonScenePhase } from './PoisonLatentScene'
@@ -21,7 +22,9 @@ export function PoisonLatentAnimation() {
   return (
     <div className="overflow-hidden rounded-2xl border border-neutral-200 bg-white p-5 dark:border-neutral-800 dark:bg-neutral-900 md:p-6">
       <div className="mb-2 flex flex-col gap-2 sm:flex-row sm:items-start sm:justify-between">
-        <h3 className="font-display text-lg font-semibold text-neutral-900 dark:text-white md:text-xl">{c.title}</h3>
+        <h3 className="font-display text-lg font-semibold text-neutral-900 dark:text-white md:text-xl">
+          <RichText text={c.title} />
+        </h3>
         <div className="flex flex-wrap gap-x-4 gap-y-1 text-xs text-neutral-500 dark:text-neutral-400">
           <span className="inline-flex items-center gap-1.5">
             <span className="h-2.5 w-2.5 rounded-full" style={{ background: COLORS.benign }} />
@@ -55,7 +58,7 @@ export function PoisonLatentAnimation() {
           transition={{ duration: 0.4 }}
           className="mt-4 min-h-[3rem] text-center text-xs leading-snug text-neutral-500 dark:text-neutral-400 md:text-sm"
         >
-          {c.captions[phase]}
+          <RichText text={c.captions[phase]} />
         </motion.p>
       </AnimatePresence>
 

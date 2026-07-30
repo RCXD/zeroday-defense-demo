@@ -1,5 +1,6 @@
 import { motion } from 'framer-motion'
 import type { ReactNode } from 'react'
+import { RichText } from '../i18n/RichText'
 
 type Props = {
   id?: string
@@ -19,7 +20,7 @@ export function Section({ id, eyebrow, title, subtitle, children, className }: P
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, margin: '-80px' }}
           transition={{ duration: 0.5 }}
-          className="mb-12 max-w-2xl"
+          className="mb-12 max-w-3xl"
         >
           {eyebrow && (
             <p className="mb-3 text-sm font-semibold uppercase tracking-widest text-accent-600 dark:text-accent-400">
@@ -28,12 +29,12 @@ export function Section({ id, eyebrow, title, subtitle, children, className }: P
           )}
           {title && (
             <h2 className="font-display text-3xl font-bold tracking-tight text-neutral-900 md:text-4xl dark:text-white">
-              {title}
+              <RichText text={title} />
             </h2>
           )}
           {subtitle && (
             <p className="mt-4 text-lg leading-relaxed text-neutral-600 dark:text-neutral-400">
-              {subtitle}
+              {typeof subtitle === 'string' ? <RichText text={subtitle} /> : subtitle}
             </p>
           )}
         </motion.div>

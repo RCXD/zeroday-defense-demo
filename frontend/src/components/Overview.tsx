@@ -2,6 +2,7 @@ import { motion } from 'framer-motion'
 import { BrainCircuit, Layers, Database } from 'lucide-react'
 import { Section } from './Section'
 import { LearningCompareAnimation } from '../diagrams/LearningCompareAnimation'
+import { RichText } from '../i18n/RichText'
 import { useLanguage } from '../i18n/LanguageContext'
 
 export function Overview() {
@@ -43,10 +44,10 @@ export function Overview() {
               <c.icon className="h-6 w-6" />
             </div>
             <h3 className="font-display text-lg font-semibold text-neutral-900 dark:text-white">
-              {c.title}
+              <RichText text={c.title} />
             </h3>
             <p className="mt-2 text-sm leading-relaxed text-neutral-600 dark:text-neutral-400">
-              {c.body}
+              <RichText text={c.body} />
             </p>
           </motion.div>
         ))}

@@ -1,5 +1,6 @@
 import { Nav } from './components/Nav'
 import { Hero } from './components/Hero'
+import { Motivation } from './components/Motivation'
 import { PathwaysSpotlight } from './components/PathwaysSpotlight'
 import { Overview } from './components/Overview'
 import { Contributions } from './components/Contributions'
@@ -22,6 +23,7 @@ function AppShell() {
       <Nav theme={theme} onToggle={toggle} />
       <main>
         <Hero />
+        <Motivation />
         <PathwaysSpotlight />
         <Overview />
         <Contributions />

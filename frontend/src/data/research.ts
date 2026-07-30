@@ -184,6 +184,20 @@ export const FUNDING =
 
 export const DATASETS = ["Meraz'18", 'Drebin', 'EMBER'] as const
 
-/** Official ETAMU news article (posted 2022-03-15). */
+/** Official ETAMU campus news (posted 2022-03-15). Note: that article
+ *  mislabels the award as Undergraduate; the official TAMUS winners PDF lists
+ *  Master's — Business & Information Technology Poster, 1st place. */
 export const PATHWAYS_ARTICLE_URL =
   'https://www.etamu.edu/news/tamuc-students-win-awards-at-pathways-research-symposium/'
+
+/** System-wide official winners list (PDF mirrored by PVAMU Research). */
+export const PATHWAYS_WINNERS_PDF_URL =
+  'https://www.pvamu.edu/research/wp-content/uploads/sites/60/17th-Annual-Pathways-Winners-List-2022.pdf'
+
+/** Paths under Vite `public/pathways/` (prefix with import.meta.env.BASE_URL). */
+export const PATHWAYS_ASSETS = {
+  logo: 'pathways/pathways-symposium-logo.png',
+  evidence: 'pathways/pathways-award-evidence.png',
+  pdfLocal: 'pathways/17th-Annual-Pathways-Winners-List-2022.pdf',
+  hostLogo: 'pathways/tamugps-logo.jpg',
+} as const

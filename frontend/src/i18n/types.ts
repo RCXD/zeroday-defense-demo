@@ -40,6 +40,20 @@ export type Messages = {
       threat: string
     }
   }
+  motivation: {
+    eyebrow: string
+    title: string
+    subtitle: string
+    paragraphs: [string, string, string]
+    stakesTitle: string
+    stakes: string
+    incidents: [
+      { year: string; title: string; body: string },
+      { year: string; title: string; body: string },
+      { year: string; title: string; body: string },
+      { year: string; title: string; body: string },
+    ]
+  }
   pathways: {
     eyebrow: string
     title: string
@@ -64,6 +78,12 @@ export type Messages = {
     categoryNote: string
     sourceLabel: string
     sourceLink: string
+    officialSourceLabel: string
+    officialSourceLink: string
+    evidenceCaption: string
+    logoAlt: string
+    evidenceAlt: string
+    hostLogoAlt: string
   }
   overview: {
     eyebrow: string

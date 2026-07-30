@@ -3,6 +3,7 @@ import { Layers, Gauge, Zap } from 'lucide-react'
 import { Section } from './Section'
 import { AeOccCompareAnimation } from '../diagrams/AeOccCompareAnimation'
 import { PoisonLatentAnimation } from '../diagrams/PoisonLatentAnimation'
+import { RichText } from '../i18n/RichText'
 import { useLanguage } from '../i18n/LanguageContext'
 
 const ICONS = [Layers, Gauge, Zap]
@@ -32,7 +33,9 @@ export function AeOccSynergy() {
               <div className="mb-3 inline-flex rounded-lg bg-accent-50 p-2.5 text-accent-600 dark:bg-accent-500/10 dark:text-accent-400">
                 <Icon className="h-5 w-5" />
               </div>
-              <p className="text-sm leading-relaxed text-neutral-600 dark:text-neutral-400">{bullet}</p>
+              <p className="text-sm leading-relaxed text-neutral-600 dark:text-neutral-400">
+                <RichText text={bullet} />
+              </p>
             </motion.div>
           )
         })}
