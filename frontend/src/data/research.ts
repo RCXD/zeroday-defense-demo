@@ -183,3 +183,7 @@ export const FUNDING =
   'Research collaboration between Texas A&M University–Commerce and ETRI (Electronics and Telecommunications Research Institute), Korea — cybersecurity and zero-day threat detection.'
 
 export const DATASETS = ["Meraz'18", 'Drebin', 'EMBER'] as const
+
+/** Official ETAMU news article (posted 2022-03-15). */
+export const PATHWAYS_ARTICLE_URL =
+  'https://www.etamu.edu/news/tamuc-students-win-awards-at-pathways-research-symposium/'

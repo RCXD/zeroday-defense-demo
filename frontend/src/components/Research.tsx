@@ -1,8 +1,10 @@
+import { useMemo } from 'react'
 import { motion } from 'framer-motion'
-import { FileText, ExternalLink } from 'lucide-react'
+import { FileText, ExternalLink, Quote } from 'lucide-react'
 import { Section } from './Section'
 import { PUBLICATIONS } from '../data/research'
 import { useLanguage } from '../i18n/LanguageContext'
+import { usePaperCitations } from '../hooks/usePaperCitations'
 
 function PublicationCard({
   p,
@@ -10,13 +12,17 @@ function PublicationCard({
   thesisLabel,
   presentation,
   abstract,
+  citation,
 }: {
   p: (typeof PUBLICATIONS)[number]
   index: number
   thesisLabel: string
   presentation?: string
   abstract: string
+  citation?: { count: number; scholarUrl: string }
 }) {
+  const { t } = useLanguage()
+
   const inner = (
     <>
       <div className="mb-4 flex items-center justify-between">
@@ -33,6 +39,16 @@ function PublicationCard({
       <p className="mt-1 text-sm font-medium text-accent-600 dark:text-accent-400">
         {p.doi ? `${p.venue} · ${p.year}` : `${thesisLabel} · ${p.year}`}
       </p>
+      {p.doi && citation && citation.count >= 0 && (
+        <p className="mt-2 flex items-center gap-1.5 text-xs text-neutral-500 dark:text-neutral-400">
+          <Quote className="h-3.5 w-3.5 shrink-0" aria-hidden />
+          <span>
+            {t.research.citations
+              .replace('{count}', String(citation.count))
+              .replace('{source}', t.research.citationSource)}
+          </span>
+        </p>
+      )}
       {presentation && (
         <p className="mt-2 text-xs font-medium leading-relaxed text-neutral-500 dark:text-neutral-400">
           {presentation}
@@ -55,14 +71,26 @@ function PublicationCard({
       className="h-full"
     >
       {p.doi ? (
-        <a
-          href={`https://doi.org/${p.doi}`}
-          target="_blank"
-          rel="noreferrer"
-          className="group flex h-full flex-col rounded-2xl border border-neutral-200 bg-white p-6 transition-colors hover:border-accent-400 dark:border-neutral-800 dark:bg-neutral-900 dark:hover:border-accent-500"
-        >
-          {inner}
-        </a>
+        <div className="group flex h-full flex-col rounded-2xl border border-neutral-200 bg-white p-6 transition-colors hover:border-accent-400 dark:border-neutral-800 dark:bg-neutral-900 dark:hover:border-accent-500">
+          <a
+            href={`https://doi.org/${p.doi}`}
+            target="_blank"
+            rel="noreferrer"
+            className="flex flex-1 flex-col"
+          >
+            {inner}
+          </a>
+          {citation && citation.count >= 0 && (
+            <a
+              href={citation.scholarUrl}
+              target="_blank"
+              rel="noreferrer"
+              className="mt-1 inline-block text-xs font-medium text-accent-600 hover:underline dark:text-accent-400"
+            >
+              {t.research.scholarLink}
+            </a>
+          )}
+        </div>
       ) : (
         <div className="flex h-full flex-col rounded-2xl border border-neutral-200 bg-white p-6 dark:border-neutral-800 dark:bg-neutral-900">
           {inner}
@@ -74,6 +102,11 @@ function PublicationCard({
 
 export function Research() {
   const { t } = useLanguage()
+  const dois = useMemo(
+    () => PUBLICATIONS.map((p) => p.doi).filter((d): d is string => Boolean(d)),
+    [],
+  )
+  const citations = usePaperCitations(dois)
 
   return (
     <Section
@@ -91,6 +124,7 @@ export function Research() {
             thesisLabel={t.research.thesisLabel}
             presentation={t.research.presentations[p.id]}
             abstract={t.research.abstracts[p.id] ?? p.abstract}
+            citation={p.doi ? citations[p.doi] : undefined}
           />
         ))}
       </div>

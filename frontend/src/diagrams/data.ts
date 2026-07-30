@@ -65,19 +65,31 @@ export const MODEL_BARS = [
   { model: 'AEOCC', score: 96 },
 ]
 
-export const THRESHOLD_CURVE = Array.from({ length: 21 }, (_, i) => {
-  const thr = i * 0.25
-  // Peak near an “ideal” threshold ~2.0–2.5, drop on either side
-  const score = 96 - Math.abs(thr - 2.25) * 18 - (thr < 0.5 || thr > 4.5 ? 8 : 0)
-  return { threshold: Number(thr.toFixed(2)), accuracy: Math.max(55, Math.min(96, score)) }
+export const THRESHOLD_TICKS = [0, 1, 2, 3, 4, 5] as const
+
+export const THRESHOLD_CURVE = Array.from({ length: 11 }, (_, i) => {
+  const thr = i * 0.5
+  const score = 96 - Math.abs(thr - 2.5) * 16 - (thr < 0.5 || thr > 4.5 ? 8 : 0)
+  return { threshold: thr, accuracy: Math.max(55, Math.min(96, score)) }
 })
 
+export const PERTURBATION_EPS_TICKS = [0, 0.05, 0.1, 0.15, 0.2] as const
+
+export const PERTURBATION_SERIES = [
+  { key: 'aeocc', name: 'AEOCC', color: '#0d9488', width: 2.5, dash: undefined },
+  { key: 'svm', name: 'SVM', color: '#f59e0b', width: 2, dash: '6 4' },
+  { key: 'rf', name: 'RF', color: '#ef4444', width: 2, dash: '6 4' },
+  { key: 'dnn', name: 'DNN', color: '#8b5cf6', width: 2, dash: '6 4' },
+  { key: 'knn', name: 'k-NN', color: '#3b82f6', width: 2, dash: '6 4' },
+  { key: 'lr', name: 'LR', color: '#ec4899', width: 2, dash: '6 4' },
+] as const
+
 export const PERTURBATION_CURVE = [
-  { eps: 0, aeocc: 96, supervised: 97 },
-  { eps: 0.05, aeocc: 93, supervised: 88 },
-  { eps: 0.1, aeocc: 90, supervised: 79 },
-  { eps: 0.15, aeocc: 86, supervised: 71 },
-  { eps: 0.2, aeocc: 82, supervised: 64 },
+  { eps: 0, aeocc: 96, svm: 97, rf: 96, dnn: 98, knn: 95, lr: 94 },
+  { eps: 0.05, aeocc: 93, svm: 88, rf: 85, dnn: 82, knn: 87, lr: 84 },
+  { eps: 0.1, aeocc: 90, svm: 79, rf: 76, dnn: 71, knn: 80, lr: 75 },
+  { eps: 0.15, aeocc: 86, svm: 71, rf: 67, dnn: 62, knn: 72, lr: 66 },
+  { eps: 0.2, aeocc: 82, svm: 64, rf: 59, dnn: 54, knn: 65, lr: 58 },
 ]
 
 /** Deterministic pseudo-random scatter for UMAP-style illustration. */

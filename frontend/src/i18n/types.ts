@@ -21,6 +21,8 @@ export type Messages = {
     team: string
     toggleTheme: string
     story: string
+    hybrid: string
+    acknowledgments: string
   }
   hero: {
     badge: string
@@ -38,6 +40,31 @@ export type Messages = {
       threat: string
     }
   }
+  pathways: {
+    eyebrow: string
+    title: string
+    subtitle: string
+    placementBadge: string
+    labels: {
+      event: string
+      dates: string
+      location: string
+      category: string
+      presenter: string
+      placement: string
+      paperTitle: string
+    }
+    event: string
+    dates: string
+    location: string
+    category: string
+    presenter: string
+    placement: string
+    paperTitle: string
+    categoryNote: string
+    sourceLabel: string
+    sourceLink: string
+  }
   overview: {
     eyebrow: string
     title: string
@@ -50,12 +77,23 @@ export type Messages = {
     compare: {
       title: string
       stepLabel: string
-      stepNames: [string, string, string, string, string]
+      stepNames: [string, string, string, string, string, string]
       groupLabels: { benign: string; malware: string }
+      attackLabels: { poison: string; fgsm: string; hsj: string; boundary: string }
       legend: {
         benign: string
         knownMalware: string
         zeroDay: string
+      }
+      poison: {
+        legend: {
+          benign: string
+          poison: string
+          boundary: string
+          filtered: string
+        }
+        axisLabels: { x: string; y: string; z: string }
+        captions: [string, string, string, string, string]
       }
       supervised: {
         title: string
@@ -64,8 +102,10 @@ export type Messages = {
         zeroDayCaption: string
         missedCaption: string
         adversarialCaption: string
+        poisonCaption: string
         missedBadge: string
         vulnerableBadge: string
+        poisonBadge: string
       }
       profiling: {
         title: string
@@ -74,8 +114,10 @@ export type Messages = {
         zeroDayCaption: string
         detectedCaption: string
         robustCaption: string
+        poisonCaption: string
         detectedBadge: string
         robustBadge: string
+        poisonFilteredBadge: string
       }
     }
   }
@@ -87,6 +129,66 @@ export type Messages = {
     solution: { title: string; body: string; bullets: string[] }
     adversarial: { title: string; body: string; bullets: string[] }
     venues: { title: string; body: string; items: string[] }
+  }
+  aeOcc: {
+    eyebrow: string
+    title: string
+    subtitle: string
+    bullets: string[]
+    compare: {
+      title: string
+      stepLabel: string
+      stepNames: [string, string, string, string, string]
+      legend: {
+        benign: string
+        anomaly: string
+        latent: string
+      }
+      ae: {
+        title: string
+        captions: [string, string, string, string, string]
+      }
+      occ: {
+        title: string
+        captions: [string, string, string, string, string]
+      }
+      aeocc: {
+        title: string
+        captions: [string, string, string, string, string]
+        thresholdFreeBadge: string
+        efficientBadge: string
+      }
+      diagram: {
+        reconstructionError: string
+        thresholdTau: string
+        noManualTau: string
+        inputDimHigh: string
+        latentDimLow: string
+        trainingTime: string
+        trainingFast: string
+        trainingSlow: string
+        benignRegion: string
+        hyperparameters: string
+        dimReduction: string
+        outlier: string
+        encoder: string
+        latentZ: string
+        occ: string
+      }
+    }
+    poison3d: {
+      title: string
+      stepLabel: string
+      stepNames: [string, string, string, string, string]
+      captions: [string, string, string, string, string]
+      legend: {
+        benign: string
+        poison: string
+        boundary: string
+        filtered: string
+      }
+      axisLabels: { x: string; y: string; z: string }
+    }
   }
   approaches: {
     eyebrow: string
@@ -104,6 +206,11 @@ export type Messages = {
     heatmapBody: string
     galleryCaptions: Record<string, string>
     galleryThumbLabels: Record<string, string>
+    chartAxes: {
+      detectionRate: string
+      threshold: string
+      perturbation: string
+    }
   }
   research: {
     eyebrow: string
@@ -112,6 +219,9 @@ export type Messages = {
     thesisLabel: string
     presentations: Record<string, string>
     abstracts: Record<string, string>
+    citations: string
+    citationSource: string
+    scholarLink: string
   }
   team: {
     eyebrow: string
@@ -121,8 +231,20 @@ export type Messages = {
     roles: Record<string, string>
     notes: Record<string, string>
   }
+  acknowledgments: {
+    eyebrow: string
+    title: string
+    subtitle: string
+    paragraphs: string[]
+  }
   footer: {
     left: string
     right: string
+    visitors: string
+    visitorsLoading: string
+  }
+  animation: {
+    pause: string
+    play: string
   }
 }

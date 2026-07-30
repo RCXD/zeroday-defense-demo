@@ -26,7 +26,36 @@ export const de: Messages = {
     research: 'Forschung',
     team: 'Team',
     story: 'Hintergrund',
+    hybrid: 'AE+OCC',
+    acknowledgments: 'Danksagung',
     toggleTheme: 'Farbschema umschalten',
+  },
+  pathways: {
+    eyebrow: 'Frühe Anerkennung',
+    title: '1. Platz beim 17. TAMUS Pathways Student Research Symposium',
+    subtitle:
+      'East Texas A&M University (damals A&M–Commerce) meldete diese Undergraduate-Poster-Auszeichnung im März 2022 — dieselbe Forschungslinie, die später in IEEE Big Data (2021) und IEEE TNSM (2023) erschien.',
+    placementBadge: '1. Platz',
+    labels: {
+      event: 'Symposium',
+      dates: 'Termine',
+      location: 'Ort',
+      category: 'Kategorie',
+      presenter: 'Vortragende Person',
+      placement: 'Auszeichnung',
+      paperTitle: 'Postertitel',
+    },
+    event: '17th Annual TAMUS Pathways Student Research Symposium',
+    dates: '3.–4. März 2022',
+    location: 'Texas A&M University, College Station',
+    category: 'Undergraduate Business and Information Technology — Poster Presentation',
+    presenter: 'Chiho Kim (A&M–Commerce)',
+    placement: '1st place',
+    paperTitle: 'Zero-day Malware Detection using Threshold-free Autoencoding Architecture',
+    categoryNote:
+      'Offizielle Einträge führen die Kategorie Business and Information Technology — Poster, nicht eine reine Computer-Science-Sparte. Das 16. Symposium (Nov. 2019, Laredo) und der verschobene College-Station-Zyklus 2020 sind separate Veranstaltungen; diese Auszeichnung entspricht dem Symposium im März 2022 in College Station.',
+    sourceLabel: 'Quelle: offizielle Meldung der East Texas A&M University (15. März 2022)',
+    sourceLink: 'Artikel lesen',
   },
   hero: {
     badge: 'Malware-Forschung · Texas A&M University–Commerce',
@@ -35,7 +64,7 @@ export const de: Messages = {
     titleAccent: 'Zero-Day-Malware',
     titleAfter: ' ohne manuelle Schwellenwerte erkennen',
     subtitle:
-      'Ein interaktiver Einblick in profilbasierte Erkennung, die Autoencoder und One-Class-Klassifikation kombiniert — mit bis zu {detection} Erkennung auf öffentlichen Android-Malware-Datensätzen ohne Signatur-Updates.',
+      'Ein interaktiver Einblick in profilbasierte Erkennung, die Autoencoder und One-Class-Klassifikation kombiniert — mit bis zu {detection} Erkennung auf Meraz\'18, Drebin, EMBER und weiteren öffentlichen Android-Malware-Datensätzen ohne Signatur-Updates.',
     ctaApproaches: 'Ansätze erkunden',
     ctaResults: 'Ergebnisse ansehen',
     stats: {
@@ -67,8 +96,9 @@ export const de: Messages = {
     compare: {
       title: 'Überwacht vs. unüberwachtes Profiling — warum Zero-Day durchrutscht',
       stepLabel: 'Animationsschritte',
-      stepNames: ['Gelabeltes Training', 'Entscheidungsgrenze', 'Zero-Day', 'Verpasst', 'Adversariale Angriffe'],
+      stepNames: ['Gelabeltes Training', 'Entscheidungsgrenze', 'Zero-Day', 'Verpasst', 'Adversariale Angriffe', 'Poison-Filterung'],
       groupLabels: { benign: 'Gruppe 0', malware: 'Gruppe 1' },
+      attackLabels: { poison: 'Poison', fgsm: 'FGSM', hsj: 'HSJ', boundary: 'Boundary' },
       legend: {
         benign: 'Benigne Apps (Gruppe 0)',
         knownMalware: 'Bekannte Malware (Gruppe 1)',
@@ -85,9 +115,12 @@ export const de: Messages = {
         missedCaption:
           'Kein Label für die neue Familie: als benign klassifiziert. Überwachtes Lernen ist grundsätzlich ungeeignet für unbekannte Angriffsmuster.',
         adversarialCaption:
-          'Adversariale Angriffe nutzen diese fragile Grenze aus: Poison vergiftet Trainingsdaten; Evasion (FGSM, HopSkipJump, Boundary-Angriffe) schiebt Samples über die Hyperebene.',
+          'Evasionsangriffe (FGSM, HopSkipJump, Boundary) schieben Malware über die Hyperebene — die überwachte Grenze ist brüchig.',
+        poisonCaption:
+          'Poison-Stichproben verstecken sich in benignen Trainingsdaten. Die Grenze verschiebt sich und akzeptiert korrupte Punkte.',
         missedBadge: 'Verpasst',
         vulnerableBadge: 'Ausnutzbar',
+        poisonBadge: 'Vergiftet',
       },
       profiling: {
         title: 'Unüberwachtes Profiling',
@@ -100,9 +133,28 @@ export const de: Messages = {
         detectedCaption:
           'Abweichung von Normal wird markiert — Zero-Day erkannt, ohne je Malware-Labels gesehen zu haben.',
         robustCaption:
-          'Dieselben Poison- und Evasionsangriffe (FGSM, HopSkipJump, Boundary) erscheinen in beiden Panels — Profiling markiert Perturbationen, die eine überwachte Hyperebene überqueren.',
+          'Dieselben Evasionsangriffe (FGSM, HopSkipJump, Boundary) werden auf beiden Panels angewendet — Perturbationen jenseits einer überwachten Hyperebene werden hier weiterhin markiert.',
+        poisonCaption:
+          'Dieselben Poison-Punkte liegen außerhalb der benignen Hülle und werden abgewiesen — Profiling hält die Trainings-Mannigfaltigkeit sauber.',
         detectedBadge: 'Erkannt',
         robustBadge: 'Robuster',
+        poisonFilteredBadge: 'Gefiltert',
+      },
+      poison: {
+        legend: {
+          benign: 'Benignes Training',
+          poison: 'Poison-Stichprobe',
+          boundary: 'Gelernte Hülle',
+          filtered: 'Poison abgewiesen',
+        },
+        axisLabels: { x: 'x', y: 'y', z: 'z (latent)' },
+        captions: [
+          'Poison-Stichproben mischen sich unter benignen Trainingsdaten im Merkmalsraum (x, y).',
+          '45°-Ansicht entlang der latenten z-Achse: Poison liegt über der benignen Mannigfaltigkeit.',
+          'Unüberwachtes Profiling lernt eine 3D-Hülle um benignes Verhalten.',
+          'Poison außerhalb der Hülle wird abgewiesen, bevor es das Training verschlechtert.',
+          'Die benigne Mannigfaltigkeit bleibt sauber — Profiling filtert Data-Poisoning.',
+        ],
       },
     },
   },
@@ -150,6 +202,95 @@ export const de: Messages = {
         'IEEE Transactions on Network and Service Management (TNSM) · Bd. 20, Nr. 3 · Sep. 2023',
         'Masterarbeit, Texas A&M University–Commerce · Herbst 2022',
       ],
+    },
+  },
+  aeOcc: {
+    eyebrow: 'Hybrid-Begründung',
+    title: 'Warum Autoencoder mit One-Class-Klassifikation kombinieren?',
+    subtitle:
+      'AE und OCC lösen jeweils einen Teil des Zero-Day-Profilings — allein hinterlassen sie jedoch operative Engpässe. AEOCC behält die Stärken beider und entfernt die fragilen Teile.',
+    bullets: [
+      'Autoencoder-Profiling ist ausdrucksstark, doch aus dem Rekonstruktionsfehler einen Detektor zu machen erfordert ein manuell gewähltes Schwellenwert-τ bei jedem Datensatzwechsel.',
+      'One-Class-Klassifikatoren vermeiden diesen Schwellenwert, aber Hyperparameter-Tuning ist schwierig und die Trainingskosten wachsen mit der Eingabedimensionalität.',
+      'Wenn OCC den latenten AE-Raum nutzt, schrumpft das Problem: Tuning wird handhabbar, Training beschleunigt sich, und der manuelle Rekonstruktionsschwellenwert entfällt.',
+    ],
+    compare: {
+      title: 'AE vs. OCC vs. AE-OCC — komplementäre Stärken',
+      stepLabel: 'Animationsschritte',
+      stepNames: ['Benignes Profiling', 'AE-Schwellenwert-Lücke', 'OCC-Skalierungs-Lücke', 'Latenter Brückenschlag', 'AEOCC-Synergie'],
+      legend: {
+        benign: 'Benigne Trainingsstichproben',
+        anomaly: 'Erhöhter Rekonstruktionsfehler',
+        latent: 'Latente Repräsentation',
+      },
+      ae: {
+        title: 'Autoencoder (AE)',
+        captions: [
+          'Lernt, benigne Merkmalsvektoren zu rekonstruieren — starke Abstraktion normalen App-Verhaltens.',
+          'Zum Markieren von Anomalien muss ein Rekonstruktionsfehler-Schwellenwert τ gesetzt werden — manuell bei jedem Datensatzshift.',
+          'Zu niedriges τ erzeugt Fehlalarme; zu hohes lässt Zero-Day durch.',
+          'Der Encoder liefert bereits einen kompakten latenten Code, den OCC statt hochdimensionaler Rohmerkmale nutzen kann.',
+          'Im Hybrid liefert AE die Repräsentation, OCC die Entscheidungsregel — kein manuelles τ auf Rekonstruktionsfehler.',
+        ],
+      },
+      occ: {
+        title: 'One-Class-Klassifikator (OCC)',
+        captions: [
+          'Modelliert die benignen Region direkt — keine Malware-Labels und kein Rekonstruktionsschwellenwert bei der Inferenz.',
+          'Erfordert dennoch sorgfältiges Hyperparameter-Tuning (Kernelbreite, ν, Kontaminationsrate usw.) pro Merkmalsetup.',
+          'Trainingskosten skalieren mit der Eingabedimension: Berechtigungs-/API-Profile mit Hunderten Merkmalen verlangsamen OCC spürbar.',
+          'Im AE-Latentraum schrumpft die Eingabe — weniger Dimensionen, schnelleres Training und kleinerer Tuning-Suchraum.',
+          'OCC auf latenten Codes erbt die AE-Abstraktion und behält schwellenwertfreie Detektion bei der Inferenz.',
+        ],
+      },
+      aeocc: {
+        title: 'AE + OCC (AEOCC)',
+        captions: [
+          'Vorschau: Encoder komprimiert benignes Verhalten, OCC lernt eine Grenze im Latentraum.',
+          'AE-Engpass: manueller Rekonstruktionsschwellenwert.',
+          'OCC-Engpass: hochdimensionale Rohmerkmale und schweres Tuning.',
+          'Latente Brücke: Encoder-Ausgabe speist OCC — kompakter Raum, gemeinsame benignen Mannigfaltigkeit.',
+          'Schwellenwertfreie Detektion mit effizientem OCC-Tuning — das Hybrid behält, was von jedem Ansatz funktioniert.',
+        ],
+        thresholdFreeBadge: 'Kein manuelles τ',
+        efficientBadge: 'Effizientes Tuning',
+      },
+      diagram: {
+        reconstructionError: 'Fehler',
+        thresholdTau: 'τ ?',
+        noManualTau: '✓ kein manuelles τ',
+        inputDimHigh: 'Eingabedim. (hoch)',
+        latentDimLow: 'Latente Dim. (niedrig)',
+        trainingTime: 'Trainingszeit',
+        trainingFast: 'schnell',
+        trainingSlow: 'langsam',
+        benignRegion: 'Benign-Region',
+        hyperparameters: 'Hyperparameter',
+        dimReduction: 'Dim.-Reduktion',
+        outlier: 'Ausreißer',
+        encoder: 'Encoder',
+        latentZ: 'latentes z',
+        occ: 'OCC',
+      },
+    },
+    poison3d: {
+      title: 'Poison in Trainingsdaten — gefiltert im latenten z-Raum',
+      stepLabel: 'Poison-Animationsschritte',
+      stepNames: ['Infiltration', 'z-Achse sichtbar', 'Unüberwachte Grenze', 'Poison gefiltert', 'Sauberes Profiling'],
+      captions: [
+        'Poison-Stichproben mischen sich unter benignen Trainingspunkten im Merkmalsraum (x, y) — sie sollen das Training verschlechtern.',
+        '45°-Ansicht entlang der latenten z-Achse: Poison liegt über der benignen Mannigfaltigkeit — Ausreißer im Repräsentationsraum.',
+        'Unüberwachtes Profiling lernt eine Hülle um benignes Verhalten im 3D-Latentraum (einschließlich z).',
+        'Poison außerhalb der Hülle wird abgewiesen — ohne Normal-Tarnung kann die Grenze nicht gezogen werden.',
+        'Nur benigne Stichproben innerhalb der Mannigfaltigkeit bleiben — Profiling widersteht Data-Poisoning.',
+      ],
+      legend: {
+        benign: 'Benignes Training',
+        poison: 'Poison-Stichprobe',
+        boundary: 'Gelernte Hülle',
+        filtered: 'Poison abgewiesen — saubere Mannigfaltigkeit',
+      },
+      axisLabels: { x: 'x', y: 'y', z: 'z (latent)' },
     },
   },
   approaches: {
@@ -217,6 +358,11 @@ export const de: Messages = {
       'umap-fgm': 'FGM',
       'umap-hsj': 'HSJ',
     },
+    chartAxes: {
+      detectionRate: 'Erkennungsrate (%)',
+      threshold: 'Rekonstruktionsschwelle τ',
+      perturbation: 'Perturbation ε',
+    },
   },
   research: {
     eyebrow: 'Die Wissenschaft',
@@ -239,6 +385,9 @@ export const de: Messages = {
       'thesis-2022':
         'Masterarbeit mit dem grundlegenden profilbasierten Zero-Day-Malware-Erkennungsrahmen, experimenteller Methodik und vergleichender Bewertung von Autoencoder-Architekturen und hybriden AE+OCC-Entwürfen.',
     },
+    citations: '{count} Zitationen ({source}) ·',
+    citationSource: 'Semantic Scholar',
+    scholarLink: 'Google Scholar',
   },
   team: {
     eyebrow: 'Das Team',
@@ -259,8 +408,26 @@ export const de: Messages = {
       'Chiho Kim': 'Member, IEEE',
     },
   },
+  acknowledgments: {
+    eyebrow: 'Danksagung',
+    title: 'Danksagung',
+    subtitle:
+      'Angelehnt an die Danksagungen der IEEE-Big-Data-(2021)-, IEEE-TNSM-(2023)- und Masterarbeit-Publikationen, auf denen diese Demo basiert.',
+    paragraphs: [
+      'Diese Arbeit wurde teilweise durch das Electronics and Telecommunications Research Institute (ETRI), Republik Korea, im Rahmen der Cybersicherheitskooperation mit Texas A&M University–Commerce unterstützt.',
+      'Die Autoren danken Dr. Jinoh Kim für die Betreuung dieses Forschungsprogramms sowie Sang-Yoon Chang, Jonghyun Kim und Dongeun Lee für ihre Zusammenarbeit und Rückmeldungen zu den veröffentlichten Manuskripten.',
+      'Wir danken außerdem den anonymen Gutachtern der IEEE International Conference on Big Data (2021) und des IEEE Transactions on Network and Service Management (2023) für konstruktive Kommentare.',
+      'Diese interaktive Demo fasst die Arbeit zusammen, die ursprünglich in der Masterarbeit Automated Profiling-Based Zero-Day Malware Detection (Texas A&M University–Commerce, 2022) entwickelt wurde.',
+    ],
+  },
   footer: {
     left: 'Zeroday Defense — interaktive Malware-Forschungsdemo.',
     right: 'Illustrative Diagramme · Meraz\'18, Drebin, EMBER-Datensätze.',
+    visitors: '{count} Seitenaufrufe',
+    visitorsLoading: 'Besucher werden gezählt…',
+  },
+  animation: {
+    pause: 'Animation pausieren',
+    play: 'Animation abspielen',
   },
 }

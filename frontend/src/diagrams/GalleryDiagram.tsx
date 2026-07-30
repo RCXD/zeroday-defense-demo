@@ -11,23 +11,50 @@ import {
   YAxis,
   Legend,
 } from 'recharts'
-import { MODEL_BARS, PERTURBATION_CURVE, THRESHOLD_CURVE, UMAP_VIEWS, type GalleryDiagramId } from './data'
+import {
+  MODEL_BARS,
+  PERTURBATION_CURVE,
+  PERTURBATION_EPS_TICKS,
+  PERTURBATION_SERIES,
+  THRESHOLD_CURVE,
+  THRESHOLD_TICKS,
+  UMAP_VIEWS,
+  type GalleryDiagramId,
+} from './data'
+import { AXIS_TICK, CHART_MARGIN, DETECTION_TICKS, detectionYAxisLabel } from './chartConfig'
+import { useLanguage } from '../i18n/LanguageContext'
 
 const ACCENT = '#0d9488'
 const MUTED = '#94a3b8'
 const WARN = '#f59e0b'
 
 export function GalleryDiagram({ id }: { id: GalleryDiagramId }) {
+  const { t } = useLanguage()
+  const yLabel = t.results.chartAxes.detectionRate
+
   if (id === 'model-comparison' || id === 'aeocc-bar') {
     return (
-      <div className="h-72 w-full p-2">
+      <div className="h-80 w-full p-2">
         <ResponsiveContainer width="100%" height="100%">
-          <BarChart data={MODEL_BARS} margin={{ top: 8, right: 8, bottom: 0, left: -8 }}>
+          <BarChart data={MODEL_BARS} margin={CHART_MARGIN}>
             <CartesianGrid strokeDasharray="3 3" className="stroke-neutral-200 dark:stroke-neutral-800" />
-            <XAxis dataKey="model" tick={{ fontSize: 12 }} className="text-neutral-500" />
-            <YAxis domain={[50, 100]} unit="%" tick={{ fontSize: 12 }} className="text-neutral-500" />
+            <XAxis
+              dataKey="model"
+              tick={AXIS_TICK}
+              interval={0}
+              angle={-28}
+              textAnchor="end"
+              height={52}
+            />
+            <YAxis
+              domain={[50, 100]}
+              ticks={[...DETECTION_TICKS]}
+              tick={AXIS_TICK}
+              width={40}
+              label={detectionYAxisLabel(yLabel)}
+            />
             <Tooltip
-              formatter={(v) => [`${v}%`, 'Detection']}
+              formatter={(v) => [`${v}%`, yLabel]}
               contentStyle={{ borderRadius: 12, border: '1px solid #e5e5e5', fontSize: 13 }}
             />
             <Bar dataKey="score" radius={[6, 6, 0, 0]}>
@@ -43,14 +70,34 @@ export function GalleryDiagram({ id }: { id: GalleryDiagramId }) {
 
   if (id === 'ae-thresholds') {
     return (
-      <div className="h-72 w-full p-2">
+      <div className="h-80 w-full p-2">
         <ResponsiveContainer width="100%" height="100%">
-          <LineChart data={THRESHOLD_CURVE} margin={{ top: 8, right: 12, bottom: 0, left: -8 }}>
+          <LineChart data={THRESHOLD_CURVE} margin={CHART_MARGIN}>
             <CartesianGrid strokeDasharray="3 3" className="stroke-neutral-200 dark:stroke-neutral-800" />
-            <XAxis dataKey="threshold" tick={{ fontSize: 11 }} label={{ value: 'Threshold', position: 'insideBottom', offset: -2, fontSize: 11 }} />
-            <YAxis domain={[50, 100]} unit="%" tick={{ fontSize: 12 }} />
-            <Tooltip formatter={(v) => [`${Number(v).toFixed(1)}%`, 'Accuracy']} />
-            <Line type="monotone" dataKey="accuracy" stroke={ACCENT} strokeWidth={2.5} dot={false} />
+            <XAxis
+              dataKey="threshold"
+              type="number"
+              domain={[0, 5]}
+              ticks={[...THRESHOLD_TICKS]}
+              tickFormatter={(v) => Number(v).toFixed(1)}
+              tick={AXIS_TICK}
+              label={{
+                value: t.results.chartAxes.threshold,
+                position: 'insideBottom',
+                offset: -4,
+                fontSize: 11,
+                fill: '#737373',
+              }}
+            />
+            <YAxis
+              domain={[50, 100]}
+              ticks={[...DETECTION_TICKS]}
+              tick={AXIS_TICK}
+              width={40}
+              label={detectionYAxisLabel(yLabel)}
+            />
+            <Tooltip formatter={(v) => [`${Number(v).toFixed(1)}%`, yLabel]} />
+            <Line type="monotone" dataKey="accuracy" stroke={ACCENT} strokeWidth={2.5} dot={{ r: 3 }} />
           </LineChart>
         </ResponsiveContainer>
       </div>
@@ -59,16 +106,46 @@ export function GalleryDiagram({ id }: { id: GalleryDiagramId }) {
 
   if (id === 'perturbation') {
     return (
-      <div className="h-72 w-full p-2">
+      <div className="h-80 w-full p-2">
         <ResponsiveContainer width="100%" height="100%">
-          <LineChart data={PERTURBATION_CURVE} margin={{ top: 8, right: 12, bottom: 0, left: -8 }}>
+          <LineChart data={PERTURBATION_CURVE} margin={{ ...CHART_MARGIN, bottom: 36 }}>
             <CartesianGrid strokeDasharray="3 3" className="stroke-neutral-200 dark:stroke-neutral-800" />
-            <XAxis dataKey="eps" tick={{ fontSize: 12 }} label={{ value: 'Perturbation ε', position: 'insideBottom', offset: -2, fontSize: 11 }} />
-            <YAxis domain={[50, 100]} unit="%" tick={{ fontSize: 12 }} />
-            <Legend />
-            <Tooltip />
-            <Line type="monotone" dataKey="aeocc" name="AEOCC" stroke={ACCENT} strokeWidth={2.5} dot={{ r: 3 }} />
-            <Line type="monotone" dataKey="supervised" name="Supervised" stroke={WARN} strokeWidth={2.5} strokeDasharray="5 4" dot={{ r: 3 }} />
+            <XAxis
+              dataKey="eps"
+              type="number"
+              domain={[0, 0.2]}
+              ticks={[...PERTURBATION_EPS_TICKS]}
+              tickFormatter={(v) => Number(v).toFixed(2)}
+              tick={AXIS_TICK}
+              label={{
+                value: t.results.chartAxes.perturbation,
+                position: 'insideBottom',
+                offset: -4,
+                fontSize: 11,
+                fill: '#737373',
+              }}
+            />
+            <YAxis
+              domain={[50, 100]}
+              ticks={[...DETECTION_TICKS]}
+              tick={AXIS_TICK}
+              width={40}
+              label={detectionYAxisLabel(yLabel)}
+            />
+            <Legend wrapperStyle={{ fontSize: 11, paddingTop: 4 }} />
+            <Tooltip formatter={(v) => [`${Number(v).toFixed(1)}%`, yLabel]} />
+            {PERTURBATION_SERIES.map((s) => (
+              <Line
+                key={s.key}
+                type="monotone"
+                dataKey={s.key}
+                name={s.name}
+                stroke={s.color}
+                strokeWidth={s.width}
+                strokeDasharray={s.dash}
+                dot={{ r: 2.5 }}
+              />
+            ))}
           </LineChart>
         </ResponsiveContainer>
       </div>
