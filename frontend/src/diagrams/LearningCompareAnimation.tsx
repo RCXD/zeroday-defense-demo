@@ -51,10 +51,16 @@ const ADVERSARIAL_EVASION = [
   { fromX: 295, fromY: 188, toX: 175, toY: 140, label: 'Boundary', lx: 218, ly: 168 },
 ]
 
-const POISON_POINT = { x: 55, y: 168, lx: 68, ly: 152 }
+/** Poison sits near the loose ellipse but outside the tight benign hull. */
+const POISON_SAMPLES = [
+  { x: 148, y: 168 },
+  { x: 78, y: 138 },
+  { x: 28, y: 188 },
+]
 
 const PHASE_COUNT = 6
 const PHASE_MS = 3800
+const BOUNDARY_SAMPLES = 32
 
 const COLORS = {
   benign: '#14b8a6',
@@ -92,6 +98,125 @@ function clusterEnvelope(points: Point[], padding = 1.38) {
     rx: maxDx * padding + 12,
     ry: maxDy * padding + 12,
   }
+}
+
+/** Andrew's monotone chain convex hull, CCW, first point repeated at end omitted. */
+function convexHull(points: Point[]): Point[] {
+  const pts = [...points].sort((a, b) => (a.x === b.x ? a.y - b.y : a.x - b.x))
+  if (pts.length <= 2) return pts
+
+  const cross = (o: Point, a: Point, b: Point) =>
+    (a.x - o.x) * (b.y - o.y) - (a.y - o.y) * (b.x - o.x)
+
+  const lower: Point[] = []
+  for (const p of pts) {
+    while (lower.length >= 2 && cross(lower[lower.length - 2], lower[lower.length - 1], p) <= 0) {
+      lower.pop()
+    }
+    lower.push(p)
+  }
+
+  const upper: Point[] = []
+  for (let i = pts.length - 1; i >= 0; i--) {
+    const p = pts[i]
+    while (upper.length >= 2 && cross(upper[upper.length - 2], upper[upper.length - 1], p) <= 0) {
+      upper.pop()
+    }
+    upper.push(p)
+  }
+
+  lower.pop()
+  upper.pop()
+  return lower.concat(upper)
+}
+
+function inflateHull(hull: Point[], pad: number): Point[] {
+  const c = centroid(hull)
+  return hull.map((p) => {
+    const dx = p.x - c.x
+    const dy = p.y - c.y
+    const len = Math.hypot(dx, dy) || 1
+    return { x: p.x + (dx / len) * pad, y: p.y + (dy / len) * pad }
+  })
+}
+
+function ellipsePoints(cx: number, cy: number, rx: number, ry: number, n: number): Point[] {
+  return Array.from({ length: n }, (_, i) => {
+    const a = (i / n) * Math.PI * 2 - Math.PI / 2
+    return { x: cx + Math.cos(a) * rx, y: cy + Math.sin(a) * ry }
+  })
+}
+
+/** Resample a closed polygon to n points by arc length, starting near top. */
+function resampleClosed(poly: Point[], n: number): Point[] {
+  if (poly.length === 0) return []
+  const ring = [...poly, poly[0]]
+  const segLens: number[] = []
+  let total = 0
+  for (let i = 0; i < ring.length - 1; i++) {
+    const len = Math.hypot(ring[i + 1].x - ring[i].x, ring[i + 1].y - ring[i].y)
+    segLens.push(len)
+    total += len
+  }
+
+  let topIdx = 0
+  for (let i = 1; i < poly.length; i++) {
+    if (poly[i].y < poly[topIdx].y) topIdx = i
+  }
+
+  const startDist =
+    segLens.slice(0, topIdx).reduce((s, l) => s + l, 0)
+
+  const out: Point[] = []
+  for (let i = 0; i < n; i++) {
+    let d = (startDist + (i / n) * total) % total
+    for (let s = 0; s < segLens.length; s++) {
+      if (d <= segLens[s] || s === segLens.length - 1) {
+        const t = segLens[s] > 0 ? d / segLens[s] : 0
+        out.push({
+          x: ring[s].x + (ring[s + 1].x - ring[s].x) * t,
+          y: ring[s].y + (ring[s + 1].y - ring[s].y) * t,
+        })
+        break
+      }
+      d -= segLens[s]
+    }
+  }
+  return out
+}
+
+/** Closed cubic-smooth path through points (compatible morph target when point counts match). */
+function closedPathFromPoints(pts: Point[]): string {
+  if (pts.length === 0) return ''
+  const n = pts.length
+  const parts: string[] = [`M ${pts[0].x.toFixed(2)} ${pts[0].y.toFixed(2)}`]
+  for (let i = 0; i < n; i++) {
+    const p0 = pts[(i - 1 + n) % n]
+    const p1 = pts[i]
+    const p2 = pts[(i + 1) % n]
+    const p3 = pts[(i + 2) % n]
+    const cp1x = p1.x + (p2.x - p0.x) / 6
+    const cp1y = p1.y + (p2.y - p0.y) / 6
+    const cp2x = p2.x - (p3.x - p1.x) / 6
+    const cp2y = p2.y - (p3.y - p1.y) / 6
+    parts.push(
+      `C ${cp1x.toFixed(2)} ${cp1y.toFixed(2)} ${cp2x.toFixed(2)} ${cp2y.toFixed(2)} ${p2.x.toFixed(2)} ${p2.y.toFixed(2)}`,
+    )
+  }
+  parts.push('Z')
+  return parts.join(' ')
+}
+
+function tightHullPath(points: Point[], pad = 14, samples = BOUNDARY_SAMPLES): string {
+  const hull = inflateHull(convexHull(points), pad)
+  return closedPathFromPoints(resampleClosed(hull, samples))
+}
+
+function looseEllipsePath(
+  env: { cx: number; cy: number; rx: number; ry: number },
+  samples = BOUNDARY_SAMPLES,
+): string {
+  return closedPathFromPoints(ellipsePoints(env.cx, env.cy, env.rx, env.ry, samples))
 }
 
 const PLOT_BOUNDS = { x: 14, y: 14, w: 332, h: 252 }
@@ -283,12 +408,11 @@ function AdversarialEffects({
 
 /** Phase 5 — poison outcome on each panel (continues from phase 4 evasion). */
 function PoisonOutcome({ variant }: { variant: PanelVariant }) {
-  const filteredY = POISON_POINT.y - 32
-
   if (variant === 'supervised') {
+    const seed = { x: 95, y: 195 }
     return (
       <g>
-        {BENIGN.filter((p) => Math.hypot(p.x - POISON_POINT.x, p.y - POISON_POINT.y) < 42).map((p, i) => (
+        {BENIGN.filter((p) => Math.hypot(p.x - seed.x, p.y - seed.y) < 52).map((p, i) => (
           <motion.circle
             key={`corrupt-${i}`}
             cx={p.x}
@@ -300,70 +424,56 @@ function PoisonOutcome({ variant }: { variant: PanelVariant }) {
             transition={{ delay: i * 0.05, duration: 0.45 }}
           />
         ))}
-        <motion.circle
-          cx={POISON_POINT.x}
-          cy={POISON_POINT.y}
-          r={10}
-          fill={COLORS.poison}
-          stroke="#fff"
-          strokeWidth={1.5}
-          initial={{ opacity: 0, scale: 0.5 }}
-          animate={{ opacity: 0.85, scale: 1 }}
-          transition={{ duration: 0.4 }}
-        />
+        {POISON_SAMPLES.map((p, i) => (
+          <motion.circle
+            key={`poison-in-${i}`}
+            cx={p.x}
+            cy={p.y}
+            r={i === 0 ? 10 : 8}
+            fill={COLORS.poison}
+            stroke="#fff"
+            strokeWidth={1.5}
+            initial={{ opacity: 0, scale: 0.5 }}
+            animate={{ opacity: 0.9, scale: 1 }}
+            transition={{ delay: 0.1 + i * 0.08, duration: 0.4 }}
+          />
+        ))}
       </g>
     )
   }
 
   return (
     <g>
-      <motion.line
-        x1={POISON_POINT.x}
-        y1={POISON_POINT.y}
-        x2={POISON_POINT.x}
-        y2={filteredY + 8}
-        stroke={COLORS.poison}
-        strokeWidth="1.5"
-        strokeDasharray="3 2"
-        initial={{ pathLength: 0 }}
-        animate={{ pathLength: 1 }}
-        transition={{ duration: 0.5 }}
-      />
-      <motion.circle
-        cx={POISON_POINT.x}
-        cy={filteredY}
-        r={7}
-        fill={COLORS.poison}
-        initial={{ opacity: 0, y: POISON_POINT.y }}
-        animate={{ opacity: 1, y: filteredY }}
-        transition={{ type: 'spring', stiffness: 180, damping: 14 }}
-      />
-      <motion.circle
-        cx={POISON_POINT.x}
-        cy={filteredY}
-        r={13}
-        fill="none"
-        stroke={COLORS.poison}
-        strokeWidth="2"
-        strokeDasharray="4 3"
-        initial={{ opacity: 0, scale: 0.6 }}
-        animate={{ opacity: 1, scale: 1 }}
-        transition={{ delay: 0.25, duration: 0.35 }}
-      />
-      <motion.text
-        x={POISON_POINT.x}
-        y={filteredY + 4}
-        textAnchor="middle"
-        fill={COLORS.poison}
-        fontSize="12"
-        fontWeight="800"
-        fontFamily="IBM Plex Sans, sans-serif"
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        transition={{ delay: 0.35 }}
-      >
-        ×
-      </motion.text>
+      {POISON_SAMPLES.map((p, i) => (
+        <motion.g
+          key={`poison-out-${i}`}
+          initial={{ opacity: 0, scale: 0.6 }}
+          animate={{ opacity: 1, scale: 1 }}
+          transition={{ delay: 0.55 + i * 0.12, duration: 0.4, type: 'spring', stiffness: 220, damping: 16 }}
+        >
+          <circle
+            cx={p.x}
+            cy={p.y}
+            r={13}
+            fill="none"
+            stroke={COLORS.poison}
+            strokeWidth="2"
+            strokeDasharray="4 3"
+          />
+          <circle cx={p.x} cy={p.y} r={6} fill={COLORS.poison} opacity={0.45} stroke="#fff" strokeWidth={1} />
+          <text
+            x={p.x}
+            y={p.y + 4}
+            textAnchor="middle"
+            fill={COLORS.poison}
+            fontSize="12"
+            fontWeight="800"
+            fontFamily="IBM Plex Sans, sans-serif"
+          >
+            ×
+          </text>
+        </motion.g>
+      ))}
     </g>
   )
 }
@@ -379,6 +489,8 @@ function ScatterPanel({
   poisonFilteredBadge,
   boundary,
   normalRegion,
+  looseBoundaryPath,
+  tightBoundaryPath,
   groupLabels,
   attackLabels,
 }: {
@@ -392,6 +504,8 @@ function ScatterPanel({
   poisonFilteredBadge?: string
   boundary: string
   normalRegion: { cx: number; cy: number; rx: number; ry: number }
+  looseBoundaryPath: string
+  tightBoundaryPath: string
   groupLabels: { benign: string; malware: string }
   attackLabels: { poison: string; fgsm: string; hsj: string; boundary: string }
 }) {
@@ -402,6 +516,7 @@ function ScatterPanel({
   const showAdversarial = phase >= 4
   const showPoisonOutcome = phase >= 5
   const adversarialDimmed = phase >= 5
+  const boundaryPath = showPoisonOutcome ? tightBoundaryPath : looseBoundaryPath
 
   const badgeOutcome =
     phase === 5 ? (variant === 'supervised' ? 'vulnerable' : 'robust') : outcome
@@ -470,38 +585,35 @@ function ScatterPanel({
           <rect width="360" height="280" fill={`url(#grid-${variant})`} />
 
           {variant === 'profiling' && (
-            <g transform={`translate(${normalRegion.cx} ${normalRegion.cy})`}>
-              <motion.g
+            <g>
+              <motion.path
+                d={boundaryPath}
+                fill={`url(#glow-${variant})`}
+                stroke="none"
                 initial={false}
                 animate={{
-                  scale: showBoundary ? 1 : 0.01,
+                  d: boundaryPath,
                   opacity: showBoundary ? 1 : 0,
                 }}
-                transition={{ duration: 0.75, ease: 'easeOut' }}
-              >
-                <ellipse
-                  cx={0}
-                  cy={0}
-                  rx={normalRegion.rx}
-                  ry={normalRegion.ry}
-                  fill={`url(#glow-${variant})`}
-                />
-                <ellipse
-                  cx={0}
-                  cy={0}
-                  rx={normalRegion.rx}
-                  ry={normalRegion.ry}
-                  fill="none"
-                  stroke={COLORS.region}
-                  strokeWidth="2"
-                  strokeDasharray="6 4"
-                  opacity={0.9}
-                />
-              </motion.g>
-              {showBoundary && (
+                transition={{ duration: showPoisonOutcome ? 0.95 : 0.75, ease: 'easeInOut' }}
+              />
+              <motion.path
+                d={boundaryPath}
+                fill="none"
+                stroke={COLORS.region}
+                strokeWidth="2"
+                strokeDasharray="6 4"
+                initial={false}
+                animate={{
+                  d: boundaryPath,
+                  opacity: showBoundary ? 0.95 : 0,
+                }}
+                transition={{ duration: showPoisonOutcome ? 0.95 : 0.75, ease: 'easeInOut' }}
+              />
+              {showBoundary && !showPoisonOutcome && (
                 <motion.ellipse
-                  cx={0}
-                  cy={0}
+                  cx={normalRegion.cx}
+                  cy={normalRegion.cy}
                   rx={normalRegion.rx}
                   ry={normalRegion.ry}
                   fill="none"
@@ -510,6 +622,7 @@ function ScatterPanel({
                   initial={{ opacity: 0.45, scale: 0.96 }}
                   animate={{ opacity: 0, scale: 1.1 }}
                   transition={{ duration: 2.2, repeat: Infinity, ease: 'easeOut' }}
+                  style={{ transformOrigin: `${normalRegion.cx}px ${normalRegion.cy}px` }}
                 />
               )}
             </g>
@@ -645,13 +758,15 @@ function ScatterPanel({
 export function LearningCompareAnimation() {
   const { t } = useLanguage()
 
-  const geometry = useMemo(
-    () => ({
+  const geometry = useMemo(() => {
+    const normalRegion = clusterEnvelope(BENIGN)
+    return {
       boundary: separationBoundary(BENIGN, KNOWN_MALWARE),
-      normalRegion: clusterEnvelope(BENIGN),
-    }),
-    [],
-  )
+      normalRegion,
+      looseBoundaryPath: looseEllipsePath(normalRegion),
+      tightBoundaryPath: tightHullPath(BENIGN, 14),
+    }
+  }, [])
 
   const { phase: phaseRaw, goToPhase, paused, togglePause } = useAutoPhase(PHASE_COUNT, PHASE_MS)
   const phase = phaseRaw as Phase
@@ -751,6 +866,8 @@ export function LearningCompareAnimation() {
           poisonBadge={c.supervised.poisonBadge}
           boundary={geometry.boundary}
           normalRegion={geometry.normalRegion}
+          looseBoundaryPath={geometry.looseBoundaryPath}
+          tightBoundaryPath={geometry.tightBoundaryPath}
           groupLabels={c.groupLabels}
           attackLabels={c.attackLabels}
         />
@@ -764,6 +881,8 @@ export function LearningCompareAnimation() {
           poisonFilteredBadge={c.profiling.poisonFilteredBadge}
           boundary={geometry.boundary}
           normalRegion={geometry.normalRegion}
+          looseBoundaryPath={geometry.looseBoundaryPath}
+          tightBoundaryPath={geometry.tightBoundaryPath}
           groupLabels={c.groupLabels}
           attackLabels={c.attackLabels}
         />

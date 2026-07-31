@@ -1,6 +1,7 @@
 import { motion } from 'framer-motion'
 import { Award, ExternalLink, FileText } from 'lucide-react'
 import { PATHWAYS_ARTICLE_URL, PATHWAYS_ASSETS, PATHWAYS_WINNERS_PDF_URL } from '../data/research'
+import { RichText } from '../i18n/RichText'
 import { useLanguage } from '../i18n/LanguageContext'
 
 function assetUrl(path: string) {
@@ -50,7 +51,7 @@ export function PathwaysSpotlight() {
                 <img
                   src={logoSrc}
                   alt={p.logoAlt}
-                  className="h-auto w-full max-w-md object-contain dark:brightness-110"
+                  className="h-auto w-full max-w-[16rem] object-contain dark:brightness-110 sm:max-w-[18rem]"
                 />
               </a>
               <p className="mb-2 text-sm font-semibold uppercase tracking-widest text-accent-600 dark:text-accent-400">
@@ -63,7 +64,7 @@ export function PathwaysSpotlight() {
                 {p.title}
               </h2>
               <p className="mt-3 text-sm leading-relaxed text-neutral-600 md:text-base dark:text-neutral-400">
-                {p.subtitle}
+                <RichText text={p.subtitle} />
               </p>
             </div>
             <div className="inline-flex shrink-0 items-center gap-2 self-start rounded-full bg-accent-500/10 px-4 py-2 text-sm font-semibold text-accent-700 dark:text-accent-300">
@@ -72,29 +73,20 @@ export function PathwaysSpotlight() {
             </div>
           </div>
 
-          <dl className="grid gap-3 sm:grid-cols-2">
-            {rows.map(({ label, value }) => (
-              <div
-                key={label}
-                className="rounded-xl border border-neutral-200 bg-neutral-50/80 px-4 py-3 dark:border-neutral-800 dark:bg-neutral-950/50"
-              >
-                <dt className="text-xs font-semibold uppercase tracking-wide text-neutral-500 dark:text-neutral-400">
-                  {label}
-                </dt>
-                <dd className="mt-1 text-sm leading-relaxed text-neutral-800 dark:text-neutral-200">{value}</dd>
-              </div>
-            ))}
-          </dl>
-
-          <figure className="mt-6 overflow-hidden rounded-xl border border-neutral-200 bg-white dark:border-neutral-800">
-            <a href={PATHWAYS_WINNERS_PDF_URL} target="_blank" rel="noopener noreferrer" className="block">
+          <figure className="mt-5 overflow-hidden rounded-xl border border-neutral-200 bg-white dark:border-neutral-800">
+            <a
+              href={PATHWAYS_WINNERS_PDF_URL}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="block overflow-x-auto p-2 sm:p-3"
+            >
               <img
                 src={evidenceSrc}
                 alt={p.evidenceAlt}
-                className="h-auto w-full object-contain"
+                className="mx-auto h-auto w-full min-w-[40rem] object-contain md:min-w-0"
               />
             </a>
-            <figcaption className="border-t border-neutral-200 px-4 py-3 text-xs leading-relaxed text-neutral-500 dark:border-neutral-800 dark:text-neutral-400 md:text-sm">
+            <figcaption className="border-t border-neutral-200 bg-neutral-50 px-4 py-2.5 text-xs leading-relaxed text-neutral-500 dark:border-neutral-800 dark:bg-neutral-950/50 dark:text-neutral-400 md:text-sm">
               {p.evidenceCaption}{' '}
               <a
                 href={PATHWAYS_WINNERS_PDF_URL}
@@ -107,6 +99,20 @@ export function PathwaysSpotlight() {
               </a>
             </figcaption>
           </figure>
+
+          <dl className="mt-5 grid gap-3 sm:grid-cols-2">
+            {rows.map(({ label, value }) => (
+              <div
+                key={label}
+                className="rounded-xl border border-neutral-200 bg-neutral-50/80 px-4 py-3 dark:border-neutral-800 dark:bg-neutral-950/50"
+              >
+                <dt className="text-xs font-semibold uppercase tracking-wide text-neutral-500 dark:text-neutral-400">
+                  {label}
+                </dt>
+                <dd className="mt-1 text-sm leading-relaxed text-neutral-800 dark:text-neutral-200">{value}</dd>
+              </div>
+            ))}
+          </dl>
 
           <p className="mt-5 text-xs leading-relaxed text-neutral-500 dark:text-neutral-400">{p.categoryNote}</p>
 
@@ -149,7 +155,7 @@ export function PathwaysSpotlight() {
             <img
               src={hostLogoSrc}
               alt={p.hostLogoAlt}
-              className="h-10 w-auto rounded-sm object-contain shadow-sm sm:h-12"
+              className="h-8 w-auto rounded-sm object-contain shadow-sm sm:h-10"
             />
           </div>
         </motion.div>
