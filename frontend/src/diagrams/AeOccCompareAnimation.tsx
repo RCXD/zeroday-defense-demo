@@ -170,8 +170,9 @@ function ProgressBar({
         transition={{ duration: progress > 0.7 ? 0.6 : 2.2, ease: 'easeInOut' }}
       />
       <text
-        x={x + w + 6}
-        y={y + 7}
+        x={x + w / 2}
+        y={y + 20}
+        textAnchor="middle"
         fill={COLORS.dim}
         fontSize="9"
         fontFamily="IBM Plex Sans, sans-serif"
@@ -361,6 +362,18 @@ function dimBarsWidth(count: number) {
   return count * barW + (count - 1) * gap
 }
 
+/** OCC panel viewBox center — all chrome/geometry anchors here. */
+const OCC_CX = 180
+
+const OCC_BENIGN = [
+  { x: -28, y: -8 },
+  { x: -10, y: 6 },
+  { x: 12, y: -12 },
+  { x: -18, y: 14 },
+  { x: 22, y: 4 },
+  { x: 4, y: -2 },
+]
+
 function OccPanel({
   phase,
   caption,
@@ -379,29 +392,41 @@ function OccPanel({
   const showLatentOnly = phase >= 4
   const showProgress = phase >= 2
   const progress = phase === 2 ? 0.32 : phase === 3 ? 0.68 : phase >= 4 ? 0.94 : 0
-  const boundaryY = phase <= 1 ? 155 : 175
-  const cx = 180
-  const highDimX = (360 - dimBarsWidth(18)) / 2
-  const latentOnlyX = (360 - dimBarsWidth(4)) / 2
-  // Phase 3 group: 10 bars → gap/arrow → 4 bars, centered as a unit
+  // Leave room for progress speed label under the bar in later phases
+  const boundaryY = phase <= 1 ? 168 : phase === 2 ? 188 : 198
+  const regionCy = 52
+  const regionRx = 70
+  const regionRy = 46
+
+  const highDimX = OCC_CX - dimBarsWidth(18) / 2
+  const latentOnlyX = OCC_CX - dimBarsWidth(4) / 2
+
+  // Phase 3: high→low bars — center by visual mass so the wider left block does not pull left
   const dimTransLeftW = dimBarsWidth(10)
   const dimTransRightW = dimBarsWidth(4)
-  const dimTransGap = 40
-  const dimTransGroupW = dimTransLeftW + dimTransGap + dimTransRightW
-  const dimTransLeftX = (360 - dimTransGroupW) / 2
+  const dimTransGap = 36
+  const dimTransLeftCenter = dimTransLeftW / 2
+  const dimTransRightCenter = dimTransLeftW + dimTransGap + dimTransRightW / 2
+  const dimTransCom =
+    (dimTransLeftW * dimTransLeftCenter + dimTransRightW * dimTransRightCenter) /
+    (dimTransLeftW + dimTransRightW)
+  const dimTransLeftX = OCC_CX - dimTransCom
   const dimTransRightX = dimTransLeftX + dimTransLeftW + dimTransGap
-  const dimTransArrowX1 = dimTransLeftX + dimTransLeftW + 8
-  const dimTransArrowX2 = dimTransRightX - 8
+  const dimTransArrowX1 = dimTransLeftX + dimTransLeftW + 6
+  const dimTransArrowX2 = dimTransRightX - 6
+  const dimTransMidX = (dimTransArrowX1 + dimTransArrowX2) / 2
+
   const knobsW = 2 * 42 + 24
-  const knobsX = (360 - knobsW) / 2
-  const progressW = 200
-  const progressX = (360 - progressW) / 2
-  const regionCx = 85
-  const regionTranslateX = cx - regionCx
+  const knobsX = OCC_CX - knobsW / 2
+  const progressW = 180
+  const progressX = OCC_CX - progressW / 2
+  const hasMidChrome = showTuning || showTuningResolved
+  const progressLabelY = hasMidChrome ? 108 : 86
+  const progressBarY = hasMidChrome ? 114 : 92
 
   return (
     <div className="relative flex flex-col">
-      <h4 className="mb-3 px-1 font-display text-sm font-semibold text-neutral-900 dark:text-white md:text-base">
+      <h4 className="mb-3 px-1 text-center font-display text-sm font-semibold text-neutral-900 dark:text-white md:text-base">
         <RichText text={title} />
       </h4>
       <div className="relative overflow-hidden rounded-xl border border-neutral-200 bg-neutral-50/80 dark:border-neutral-800 dark:bg-neutral-950/60">
@@ -418,18 +443,18 @@ function OccPanel({
 
           {/* Phase 2: high-dimensional raw features */}
           {showHighDim && (
-            <DimBars count={18} x={highDimX} y={16} label={diagram.inputDimHigh} highlight />
+            <DimBars count={18} x={highDimX} y={14} label={diagram.inputDimHigh} highlight />
           )}
 
           {/* Phase 3: high → low dimension transition */}
           {showDimTransition && (
             <g>
-              <DimBars count={10} x={dimTransLeftX} y={16} label={diagram.inputDimHigh} highlight={false} />
+              <DimBars count={10} x={dimTransLeftX} y={14} label={diagram.inputDimHigh} highlight={false} />
               <motion.line
                 x1={dimTransArrowX1}
-                y1={38}
+                y1={36}
                 x2={dimTransArrowX2}
-                y2={38}
+                y2={36}
                 stroke={COLORS.latent}
                 strokeWidth="2"
                 markerEnd="url(#arrow-dim-reduce)"
@@ -438,8 +463,8 @@ function OccPanel({
                 transition={{ duration: 0.5 }}
               />
               <text
-                x={cx}
-                y={28}
+                x={dimTransMidX}
+                y={26}
                 textAnchor="middle"
                 fill={COLORS.latent}
                 fontSize="8"
@@ -448,21 +473,21 @@ function OccPanel({
               >
                 {diagram.dimReduction}
               </text>
-              <DimBars count={4} x={dimTransRightX} y={16} label={diagram.latentDimLow} highlight />
+              <DimBars count={4} x={dimTransRightX} y={14} label={diagram.latentDimLow} highlight />
             </g>
           )}
 
           {/* Phase 4: latent space only */}
           {showLatentOnly && (
-            <DimBars count={4} x={latentOnlyX} y={16} label={diagram.latentDimLow} highlight />
+            <DimBars count={4} x={latentOnlyX} y={14} label={diagram.latentDimLow} highlight />
           )}
 
           {/* Phase 1–2: hyperparameter tuning */}
           {showTuning && (
             <g>
               <text
-                x={cx}
-                y={74}
+                x={OCC_CX}
+                y={72}
                 textAnchor="middle"
                 fill={COLORS.tune}
                 fontSize="8"
@@ -471,7 +496,7 @@ function OccPanel({
               >
                 {diagram.hyperparameters}
               </text>
-              <TuningKnobs x={knobsX} y={82} showResolved={false} active />
+              <TuningKnobs x={knobsX} y={80} showResolved={false} active />
             </g>
           )}
 
@@ -479,8 +504,8 @@ function OccPanel({
           {showTuningResolved && (
             <g>
               <text
-                x={cx}
-                y={74}
+                x={OCC_CX}
+                y={72}
                 textAnchor="middle"
                 fill={COLORS.benign}
                 fontSize="8"
@@ -489,7 +514,7 @@ function OccPanel({
               >
                 {diagram.hyperparameters}
               </text>
-              <TuningKnobs x={knobsX} y={82} showResolved active />
+              <TuningKnobs x={knobsX} y={80} showResolved active />
             </g>
           )}
 
@@ -497,8 +522,8 @@ function OccPanel({
           {showProgress && (
             <g>
               <text
-                x={cx}
-                y={showTuning || showTuningResolved ? 112 : 90}
+                x={OCC_CX}
+                y={progressLabelY}
                 textAnchor="middle"
                 fill={COLORS.dim}
                 fontSize="8"
@@ -509,7 +534,7 @@ function OccPanel({
               </text>
               <ProgressBar
                 x={progressX}
-                y={showTuning || showTuningResolved ? 118 : 96}
+                y={progressBarY}
                 w={progressW}
                 progress={progress}
                 active
@@ -518,25 +543,26 @@ function OccPanel({
             </g>
           )}
 
-          {/* Benign region boundary — always visible, horizontally centered */}
-          <g transform={`translate(${regionTranslateX} ${boundaryY})`}>
+          {/* Benign region — absolute coords around OCC_CX */}
+          <g>
             <motion.ellipse
-              cx={regionCx}
-              cy={55}
-              rx={72}
-              ry={48}
+              cx={OCC_CX}
+              cy={boundaryY + regionCy}
+              rx={regionRx}
+              ry={regionRy}
               fill={COLORS.region}
               fillOpacity={0.06}
               stroke={COLORS.region}
               strokeWidth="2"
               strokeDasharray="6 4"
-              initial={{ opacity: 0, scale: 0.8 }}
+              initial={{ opacity: 0, scale: 0.85 }}
               animate={{ opacity: 0.95, scale: 1 }}
               transition={{ duration: 0.5 }}
+              style={{ transformOrigin: `${OCC_CX}px ${boundaryY + regionCy}px` }}
             />
             <text
-              x={regionCx}
-              y={18}
+              x={OCC_CX}
+              y={boundaryY + 14}
               textAnchor="middle"
               fill={COLORS.region}
               fontSize="9"
@@ -545,18 +571,11 @@ function OccPanel({
             >
               {diagram.benignRegion}
             </text>
-            {[
-              { x: 70, y: 48 },
-              { x: 88, y: 62 },
-              { x: 100, y: 44 },
-              { x: 78, y: 70 },
-              { x: 108, y: 58 },
-              { x: 92, y: 52 },
-            ].map((p, i) => (
+            {OCC_BENIGN.map((p, i) => (
               <motion.circle
                 key={`ob-${i}`}
-                cx={p.x}
-                cy={p.y}
+                cx={OCC_CX + p.x}
+                cy={boundaryY + regionCy + p.y}
                 r={4}
                 fill={COLORS.benign}
                 initial={{ opacity: 0 }}
@@ -565,9 +584,28 @@ function OccPanel({
               />
             ))}
             {phase >= 4 && (
-              <motion.g initial={{ opacity: 0, scale: 0 }} animate={{ opacity: 1, scale: 1 }} transition={{ delay: 0.3 }}>
-                <circle cx={158} cy={42} r={5} fill={COLORS.anomaly} stroke={COLORS.malware} strokeWidth="1.5" />
-                <text x={168} y={45} fill={COLORS.anomaly} fontSize="8" fontWeight="700" fontFamily="IBM Plex Sans, sans-serif">
+              <motion.g
+                initial={{ opacity: 0, scale: 0 }}
+                animate={{ opacity: 1, scale: 1 }}
+                transition={{ delay: 0.3 }}
+                style={{ transformOrigin: `${OCC_CX + regionRx + 18}px ${boundaryY + regionCy - 10}px` }}
+              >
+                <circle
+                  cx={OCC_CX + regionRx + 18}
+                  cy={boundaryY + regionCy - 10}
+                  r={5}
+                  fill={COLORS.anomaly}
+                  stroke={COLORS.malware}
+                  strokeWidth="1.5"
+                />
+                <text
+                  x={OCC_CX + regionRx + 28}
+                  y={boundaryY + regionCy - 7}
+                  fill={COLORS.anomaly}
+                  fontSize="8"
+                  fontWeight="700"
+                  fontFamily="IBM Plex Sans, sans-serif"
+                >
                   {diagram.outlier}
                 </text>
               </motion.g>
